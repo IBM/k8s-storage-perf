@@ -35,7 +35,7 @@ Ansible playbooks to collect Storage performance metrics on an OpenShift cluster
  - Clone this git repo to your client
 
    ```
-     git clone https://github.com/IBM/k8s-storage-tests
+     git clone https://github.com/IBM/k8s-storage-perf
    ```
   
  - Update the `params.yml` file with your OCP URL and Credentials
@@ -54,15 +54,17 @@ Ansible playbooks to collect Storage performance metrics on an OpenShift cluster
       ```
  
       ```
-      storage_perf_namespace: <required> # openshift namespace/project where jobs will be executed, it will be created by playbook if not already existing.
+      storageClass_ReadWriteOnce: <required> 
+      storageClass_ReadWriteMany: <required> 
+      storage_validation_namespace: <required>
       ```
     
       Optionally, you can set/modify these label parameters to display in the final CSV report
     
       ```
-      cluster_infrastructure: ibmcloud
+      cluster_infrastructure: eg, ibmcloud, aws, azure or vmware
       cluster_name: storage-performance-cluster
-      storage_type: ocs or portworx or nfs or any other storage vendor
+      storage_type: <storage vendor>
       ```
 
       You can run the tests with a "remote mode" where the performance jobs can run on a dedicated compute node. The compute node 
