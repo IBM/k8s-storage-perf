@@ -35,7 +35,7 @@ Ansible playbooks to collect Storage performance metrics on an OpenShift cluster
  - Clone this git repo to your client
 
    ```
-     git clone https://github.com/IBM/k8s-storage-tests
+     git clone https://github.com/IBM/k8s-storage-perf --branch beta
    ```
   
  - Update the `params.yml` file with your OCP URL and Credentials
