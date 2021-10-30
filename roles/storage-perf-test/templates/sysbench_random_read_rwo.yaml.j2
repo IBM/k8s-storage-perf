@@ -37,3 +37,5 @@ spec:
           claimName: pvc-sysbench-rwo
           readOnly: false
       restartPolicy: Never
+      securityContext:
+        fsGroup: {{ target_uid_reader }}
