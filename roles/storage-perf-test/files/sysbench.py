@@ -15,7 +15,7 @@ def runSysbench(threads, fileTotalSize, fileTestMode, fileBlockSize, fileIoMode,
 
 def getAvg(subDict):
     if subDict and len(subDict.values()) > 0:
-        return round(sum(subDict.values())* 1.0/len(subDict.values()), 2)
+        return round(sum(subDict.values())* 1.0/len(subDict.values()), 1)
     return 0
 
 def computeAvgs(data, threads):
@@ -33,7 +33,7 @@ def extractValue(text):
         value = values[len(values)-1]
         if value[-1] == 's':
             value = value[:-1]
-        return round(float(value), 2)
+        return round(float(value), 1)
     return ''
 
 def runtest(numOfTests, thread, fileTotalSize, fileNum, fileTestMode, fbs, fileIoMode, fileFsyncFreq, fileExtraFlags, environment, clusterName, storageType, pvc):
