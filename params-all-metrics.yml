@@ -14,7 +14,7 @@ run_storage_perf: true
 # vars file for roles/storage-perf-test
 storage_perf_namespace: <required>  # openshift namespace/project where jobs will be executed, it will be created by playbook if not already existing.
 logfolder: '.logs'
-imageurl: quay.io/ibm-cp4d-public/xsysbench:1.0
+imageurl: quay.io/ibm-cp4d-public/xsysbench:1.1
 
 cluster_infrastructure: ibmcloud # optional labels eg ibmcloud, aws, azure, vmware
 cluster_name: storage-performance-cluster # optional labels 

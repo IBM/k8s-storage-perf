@@ -1,7 +1,7 @@
 import csv, sys, json, os
 
 def toCsv(dict_data):
-    columns = ['Cluster Name', 'PVC', 'Storage Type', 'Environment', 'Test Name','Thread Count','Reads/s', 'Writes/s', 'read Mb/s', 'write Mb/s', 'Total Time', 'Latency Min', 'Latency Avg', 'Latency Max', 'Latency 95th']
+    columns = ['Cluster Name', 'PVC', 'Storage Type', 'Environment', 'Test Name','Thread Count', 'write Mb/s', 'Writes/s', 'read Mb/s', 'Reads/s', 'Total Time', 'Latency Min', 'Latency Avg', 'Latency Max', 'Latency 95th']
     csv_file = "result.csv"
     try:
         with open(csv_file, 'w') as csvfile:
