@@ -21,7 +21,7 @@ def toCsv(dict_data):
             for data in dict_copy:
                 if data['Test Name'] == 'rndwr_4k_8' or data['Test Name'] == 'seqwr_1g_2':
                    minumum = throughput if (data['Test Name'] == 'seqwr_1g_2') else latency
-                   data['Requirement'] = 'Recommended to meet the requirement of ' + minumum + ' Mb/s'
+                   data['Requirement'] = 'Recommended to meet the requirement of ' + minumum + ' Mb/s or higher'
                    del data['Latency Max']
                    del data['read Mb/s']
                    del data['Total Time']
