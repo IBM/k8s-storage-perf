@@ -14,9 +14,9 @@ Ansible playbooks to collect Storage performance metrics on an OpenShift cluster
 
   `ln -s -f /usr/local/bin/python3 /usr/local/bin/python`
 
-- Install Ansible
+- Install Ansible 2.10.5 or later
   
-  `pip install ansible`
+  `pip install ansible==2.10.5`
 
 - Install ansible k8s modules
 
