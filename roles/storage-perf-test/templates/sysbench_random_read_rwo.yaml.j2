@@ -12,7 +12,7 @@ spec:
       {{ cm.nodeAffinity() | indent(6) }}
       containers:
       - name: sysbench-random-read-rwo
-        image: {{ imageurl }}
+        image: {{ imageurl }}-{{ arch }}
         command: ["python3"]
         args:
           - '/tmp/sysbench.py'

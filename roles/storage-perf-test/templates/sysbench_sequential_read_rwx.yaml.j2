@@ -12,7 +12,7 @@ spec:
       {{ cm.nodeAffinity() | indent(6) }}
       containers:
       - name: sysbench-sequential-read-rwx
-        image: {{ imageurl }}
+        image: {{ imageurl }}-{{ arch }}
         command: ["python3"]
         args:
           - '/tmp/sysbench.py'

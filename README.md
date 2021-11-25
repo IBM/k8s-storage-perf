@@ -56,6 +56,7 @@ Ansible playbooks to collect Storage performance metrics on an OpenShift cluster
    
       ```
       run_storage_perf: true
+      arch: amd64 or ppc64le
       ```
  
       ```
