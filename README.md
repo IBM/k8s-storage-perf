@@ -35,13 +35,13 @@ Ansible playbooks to collect Storage performance metrics on an OpenShift cluster
  - Clone this git repo to your client
 
    ```
-     git clone https://github.com/IBM/k8s-storage-perf --branch beta
+     git clone https://github.com/IBM/k8s-storage-perf
    ```
 
- - Select the metrics that you want to capture. There are three versions of the params file
-  * `params.yml` - catpures 4K 8 threads, 1GB 2 threads (write only) 
-  * `params-extended-metrics.yml` - captures 4K 1/4/8/16 threads and 1GB 1/2 threads (write only) 
-  * `params-all-metrics.yml` - captures all metrics for read and write
+ - Select the appropriate parameter yaml file for the level of data collection you would like. There are three versions of the params file
+  * `params.yml` - Default. Will only run selected write tests that are considered in the CP4D Knowledge Center.
+  * `params-extended-metrics.yml` - Extended writes. Will run all write tests.
+  * `params-all-metrics.yml` - All tests. Will run all combinations of read and write tests.
   
  - Update the `params.yml` file with your OCP URL and Credentials
  
