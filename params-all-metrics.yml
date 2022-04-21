@@ -10,6 +10,8 @@ storageClass_ReadWriteMany: <required>  # eg "ocs-storagecluster-cephfs"
 
 run_storage_perf: true
 
+arch: amd64  # amd64, ppc64le
+
 ############################ STORAGE PERFORMANCE PARAMETERS START #######################
 # vars file for roles/storage-perf-test
 storage_perf_namespace: <required>  # openshift namespace/project where jobs will be executed, it will be created by playbook if not already existing.
