@@ -110,6 +110,68 @@ Ansible playbooks to collect Storage performance metrics on an OpenShift cluster
    - jobs.csv
    - params.log
  
+### Running the Playbook with the Container
+
+#### Environment Setup
+
+```sh
+export dockerexe=podman # or docker
+export container_name=k8s-storage-perf
+# export docker_image="TODO: we need a location for this"
+
+alias k8s_storage_perf_exec="${dockerexe} exec ${container_name}"
+alias run_k8s_storage_perf="k8s_storage_perf_exec ansible-playbook main.yml --extra-vars \"@/tmp/work-dir/params.yml\" | tee output.log"
+alias run_k8s_storage_perf_cleanup="k8s_storage_perf_exec cleanup.sh -n ${NAMESPACE} -d"
+```
+
+#### Start the Container
+
+```sh
+mkdir -p /tmp/k8s_storage_test/work-dir
+cp ./params.yml /tmp/k8s_storage_test/work-dir/params.yml
+
+${dockerexe} run --name ${container_name} -d -v /tmp/k8s_storage_test/work-dir:/tmp/work-dir ${docker_image}
+```
+
+#### Run the Playbook
+
+```sh
+run_k8s_storage_perf
+```
+
+Then to view the results:
+
+```sh
+mkdir /tmp/k8s_storage_test/work-dir/data
+docker cp ${container_name}:/storage-perf.tar /tmp/k8s_storage_test/work-dir/data/storage-perf.tar
+tar -xf /tmp/k8s_storage_test/work-dir/data/storage-perf.tar -C /tmp/k8s_storage_test/work-dir/data
+tree /tmp/k8s_storage_test/work-dir/data
+/tmp/k8s_storage_test/work-dir/data
+├── jobs.csv
+├── nodes.csv
+├── params.log
+├── pods.csv
+├── result.csv
+└── storage-perf.tar
+
+0 directories, 6 files
+```
+
+#### Optional Cleanup the Cluster
+
+```sh
+run_k8s_storage_perf_cleanup
+
+[INFO ] running clean up for namespace storage-validation-1 and the namespace will be deleted
+[INFO ] please run the following command in a terminal that has access to the cluster to clean up after the ansible playbooks
+
+oc get job -n storage-validation-1 -o name | xargs -I % -n 1 oc delete % -n storage-validation-1 && \
+oc get pvc -n storage-validation-1 -o name | xargs -I % -n 1 oc delete % -n storage-validation-1 && \
+oc get cm -n storage-validation-1 -o name | xargs -I % -n 1 oc delete % -n storage-validation-1 && \
+oc delete ns storage-validation-1 --ignore-not-found
+
+[INFO ] cleanup script finished with no errors
+```
  
 ### Clean-up Resources
 
