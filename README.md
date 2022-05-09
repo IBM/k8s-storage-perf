@@ -127,10 +127,10 @@ alias run_k8s_storage_perf_cleanup="k8s_storage_perf_exec cleanup.sh -n ${NAMESP
 #### Start the Container
 
 ```sh
-mkdir -p /tmp/k8s_storage_test/work-dir
-cp ./params.yml /tmp/k8s_storage_test/work-dir/params.yml
+mkdir -p /tmp/k8s_storage_perf/work-dir
+cp ./params.yml /tmp/k8s_storage_perf/work-dir/params.yml
 
-${dockerexe} run --name ${container_name} -d -v /tmp/k8s_storage_test/work-dir:/tmp/work-dir ${docker_image}
+${dockerexe} run --name ${container_name} -d -v /tmp/k8s_storage_perf/work-dir:/tmp/work-dir ${docker_image}
 ```
 
 #### Run the Playbook
@@ -142,11 +142,11 @@ run_k8s_storage_perf
 Then to view the results:
 
 ```sh
-mkdir /tmp/k8s_storage_test/work-dir/data
-docker cp ${container_name}:/storage-perf.tar /tmp/k8s_storage_test/work-dir/data/storage-perf.tar
-tar -xf /tmp/k8s_storage_test/work-dir/data/storage-perf.tar -C /tmp/k8s_storage_test/work-dir/data
-tree /tmp/k8s_storage_test/work-dir/data
-/tmp/k8s_storage_test/work-dir/data
+mkdir /tmp/k8s_storage_perf/work-dir/data
+docker cp ${container_name}:/opt/ansible/storage-perf.tar /tmp/k8s_storage_perf/work-dir/data/storage-perf.tar
+tar -xf /tmp/k8s_storage_perf/work-dir/data/storage-perf.tar -C /tmp/k8s_storage_perf/work-dir/data
+tree /tmp/k8s_storage_perf/work-dir/data
+/tmp/k8s_storage_perf/work-dir/data
 ├── jobs.csv
 ├── nodes.csv
 ├── params.log
