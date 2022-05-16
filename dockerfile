@@ -24,6 +24,13 @@ COPY roles/* ${HOME}/roles/
 
 RUN ln -fs ${HOME}/bin/entrypoint /usr/local/bin/entrypoint
 
+# In order for the 'module/action 'community.kubernetes.k8s_log' to
+# be resolved, we must pin to a minimum version of teh ansible runtime.
+#
+# We build from the uib8-minimal and ansible controller base layers
+# to setup the required filesystem and OS settings, and then 
+# remove the ansible runtime in the controller for the version of
+# ansible that supports the module/action. 
 RUN python3 -m pip install --upgrade pip;  pip3 uninstall -y ansible \
     && rm -rf /usr/local/lib/python3.8/site-packages/ansible* \
     && rm -f /usr/local/bin/ansible* \
@@ -33,9 +40,8 @@ RUN python3 -m pip install --upgrade pip;  pip3 uninstall -y ansible \
     && pip3 install "oauthlib>=3.2.0" \
     && ansible-galaxy collection install operator_sdk.util \
     && ansible-galaxy collection install community.kubernetes  \
-    && curl -sL https://github.com/openshift/okd/releases/download/4.7.0-0.okd-2021-08-22-163618/openshift-client-linux-4.7.0-0.okd-2021-08-22-163618.tar.gz | tar xvz --directory /usr/local/bin/. 
-
-RUN chown -R ${USER_UID}:0 ${HOME} && chmod -R ug+rwx ${HOME}
+    && curl -sL https://github.com/openshift/okd/releases/download/4.8.0-0.okd-2021-11-14-052418/openshift-client-linux-4.8.0-0.okd-2021-11-14-052418.tar.gz | tar xvz --directory /usr/local/bin/. \
+    && chown -R ${USER_UID}:0 ${HOME} && chmod -R ug+rwx ${HOME}
 
 USER ${USER_UID}
 
