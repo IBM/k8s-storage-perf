@@ -130,6 +130,7 @@ alias run_k8s_storage_perf_cleanup="k8s_storage_perf_exec cleanup.sh -n ${NAMESP
 mkdir -p /tmp/k8s_storage_perf/work-dir
 cp ./params.yml /tmp/k8s_storage_perf/work-dir/params.yml
 
+${dockerexe} pull ${docker_image}
 ${dockerexe} run --name ${container_name} -d -v /tmp/k8s_storage_perf/work-dir:/tmp/work-dir ${docker_image}
 ```
 
