@@ -13,7 +13,7 @@
   - name: ocp login using token
     shell: oc login --server={{ ocp_url }} --token={{ ocp_token }} --insecure-skip-tls-verify=true
     register: login_token
-    when: (not ocp_username or ocp_username == '<required>' or not ocp_password or ocp_password == '<required>') 
+    when: (not ocp_token == '<required if user/password not available>' and ocp_token)
 
   - debug:
       var: login_creds.stdout_lines
@@ -21,7 +21,7 @@
 
   - debug:
       var: login_token.stdout_lines
-    when: login_token.stdout_lines is defined    
+    when: login_token.stdout_lines is defined
 
   # Storage Performance Collection Suite
   - name: Storage Performance
