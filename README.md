@@ -81,8 +81,8 @@ Ansible playbooks to collect Storage performance metrics on an OpenShift cluster
  - Optionally, you can set/modify these label parameters to display in the final CSV report
     
       ```
-      cluster_infrastructure: eg, ibmcloud, aws, azure or vmware
-      cluster_name: storage-performance-cluster
+      cluster_infrastructure: "self-cpd-cli managed" # optional label eg ibmcloud, aws, azure, vmware
+      cluster_name: storage-performance-cluster      # optional labels
       storage_type: <storage vendor>
       ```
 
