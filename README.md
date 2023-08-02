@@ -12,7 +12,13 @@ Ansible playbooks to collect Storage performance metrics on an OpenShift cluster
 
   >NB: if your python interpreter is using `python3` or `python37` or other Python 3 executables, you can create a symlink for `python` using this command
 
-  `ln -s -f /usr/local/bin/python3 /usr/local/bin/python`
+ ```
+ ln -s -f /usr/bin/python3 /usr/bin/python
+ 
+ # OR depends on the Python 3 installation location
+ 
+ ln -s -f /usr/local/bin/python3 /usr/local/bin/python
+ ```
 
   >NB: if `pip` is not available or is an older version, run the command below to upgrade it, and then check its version again.
   
