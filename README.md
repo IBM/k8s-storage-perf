@@ -14,6 +14,10 @@ Ansible playbooks to collect Storage performance metrics on an OpenShift cluster
 
   `ln -s -f /usr/local/bin/python3 /usr/local/bin/python`
 
+  Note: if `pip` is not available or is an older version, run the command below to upgrade it, and then check its version again.
+  
+  `python -m pip install --upgrade pip`
+  
 - Install Ansible 2.10.5 or later
   
   `pip install ansible==2.10.5`
