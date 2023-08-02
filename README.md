@@ -30,6 +30,15 @@ Ansible playbooks to collect Storage performance metrics on an OpenShift cluster
   
   `ansible-galaxy collection install community.kubernetes`
   
+   >NB: the `openshift` package installation requires PyYAML >= 5.4.1, and if the existing PyYAML is an older version, then PyYAML's 
+   installation will fail. To overcome this issue, manually delete the exsiting PyYAML package as below (adjust the paths in the commands 
+   according to the your host environment):
+   
+   ```
+   rm -rf /usr/lib64/python3.6/site-packages/yaml
+   rm -f  /usr/lib64/python3.6/site-packages/PyYAML-*
+   ```
+  
 - Install [OpenShift Client 4.6 or later](https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp/4.6.31) based on your OS. 
   
 - Access to the OpenShift Cluster (at least 3 compute nodes) setup with RWX and RWO storage classes with cluster admin access.
