@@ -69,7 +69,7 @@ Ansible playbooks to collect Storage performance metrics on an OpenShift cluster
    
       ```
       run_storage_perf: true
-      arch: amd64 or ppc64le
+      arch: amd64  # amd64, ppc64le
       ```
  
       ```
@@ -78,7 +78,7 @@ Ansible playbooks to collect Storage performance metrics on an OpenShift cluster
       storage_validation_namespace: <required>
       ```
     
-      Optionally, you can set/modify these label parameters to display in the final CSV report
+ - Optionally, you can set/modify these label parameters to display in the final CSV report
     
       ```
       cluster_infrastructure: eg, ibmcloud, aws, azure or vmware
@@ -86,7 +86,7 @@ Ansible playbooks to collect Storage performance metrics on an OpenShift cluster
       storage_type: <storage vendor>
       ```
 
-      You can run the tests with a "remote mode" where the performance jobs can run on a dedicated compute node. The compute node 
+ - Optionally you can run the tests with a "remote mode" where the performance jobs can run on a dedicated compute node. The compute node 
       should be labelled with a defined key and value for this purpose and set in the params file. 
 
       ```
@@ -109,7 +109,7 @@ Ansible playbooks to collect Storage performance metrics on an OpenShift cluster
     ansible-playbook main.yml --extra-vars "@./params.yml" | tee output.log
   ```
 
-  If the playbook fails to run due to SSL verification error, you can disable it by setting this environment variable before running the playbook
+  >NB: if the playbook fails to run due to SSL verification error, you can disable it by setting this environment variable before running the playbook
 
   ```
   export K8S_AUTH_VERIFY_SSL=no
