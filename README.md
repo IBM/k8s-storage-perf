@@ -161,20 +161,18 @@ run_k8s_storage_perf
 
 Then to view the results:
 
-```sh
+```
 mkdir /tmp/k8s_storage_perf/work-dir/data
 ${dockerexe} cp ${container_name}:/opt/ansible/storage-perf.tar /tmp/k8s_storage_perf/work-dir/data/storage-perf.tar
 tar -xvf /tmp/k8s_storage_perf/work-dir/data/storage-perf.tar -C /tmp/k8s_storage_perf/work-dir/data
-ls -l /tmp/k8s_storage_perf/work-dir/data
-/tmp/k8s_storage_perf/work-dir/data
-├── jobs.csv
-├── nodes.csv
-├── params.log
-├── pods.csv
-├── result.csv
-└── storage-perf.tar
 
-0 directories, 6 files
+ls -l /tmp/k8s_storage_perf/work-dir/data
+-rw-r--r-- 1 1001 root   190 Aug  2 17:18 jobs.csv
+-rw-r--r-- 1 1001 root  5615 Aug  2 17:18 nodes.csv
+-rw-r--r-- 1 1001 root   952 Aug  2 17:18 params.log
+-rw-r--r-- 1 1001 root   484 Aug  2 17:18 pods.csv
+-rw-r--r-- 1 1001 root  1453 Aug  2 17:18 result.csv
+-rw-r--r-- 1 root root 20480 Aug  2 17:18 storage-perf.tar
 ```
 
 #### Optional Cleanup the Cluster
