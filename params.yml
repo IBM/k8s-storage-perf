@@ -4,6 +4,7 @@ ocp_url: https://<required>:6443
 ocp_username: <required>  # a cluster admin user
 ocp_password: <required>
 ocp_token: <required if user/password not available>
+ocp_apikey: <required if neither user/password or token not available>
 
 storageClass_ReadWriteOnce: <required> # eg "ocs-storagecluster-ceph-rbd"
 storageClass_ReadWriteMany: <required>  # eg "ocs-storagecluster-cephfs"
