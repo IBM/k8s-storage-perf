@@ -163,9 +163,9 @@ Then to view the results:
 
 ```sh
 mkdir /tmp/k8s_storage_perf/work-dir/data
-docker cp ${container_name}:/opt/ansible/storage-perf.tar /tmp/k8s_storage_perf/work-dir/data/storage-perf.tar
-tar -xf /tmp/k8s_storage_perf/work-dir/data/storage-perf.tar -C /tmp/k8s_storage_perf/work-dir/data
-tree /tmp/k8s_storage_perf/work-dir/data
+${dockerexe} cp ${container_name}:/opt/ansible/storage-perf.tar /tmp/k8s_storage_perf/work-dir/data/storage-perf.tar
+tar -xvf /tmp/k8s_storage_perf/work-dir/data/storage-perf.tar -C /tmp/k8s_storage_perf/work-dir/data
+ls -l /tmp/k8s_storage_perf/work-dir/data
 /tmp/k8s_storage_perf/work-dir/data
 ├── jobs.csv
 ├── nodes.csv
