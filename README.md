@@ -69,7 +69,10 @@ Ansible playbooks to collect Storage performance metrics on an OpenShift cluster
     ocp_username: <required>
     ocp_password: <required>
     ocp_token: <required if user/password not available>
+    ocp_apikey: <required if neither user/password or token not available>
    ```
+  
+  >NB: update only one of the three login formats, that is, either ocp_username/ocp_password, or ocp_token, or ocp_apikey. Leave other two choices' lines intact, i.e. do NOT change the lines for the login formats that are not used.
   
  - Update the `params.yml` file for the required storage parameters
    
