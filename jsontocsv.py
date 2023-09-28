@@ -5,10 +5,10 @@ throughput = '128'
 latency = '11'
 
 def toCsv(dict_data):
-    columns = ['Cluster Name', 'PVC', 'Storage Type', 'Environment', 'Test Name','Thread Count', 'write Mb/s', 'Writes/s', 'read Mb/s', 'Reads/s', 'Total Time', 'Latency Min', 'Latency Avg', 'Latency Max', 'Latency 95th']
+    columns = ['Cluster Name', 'PVC', 'Storage Type', 'Environment', 'Test Name','Thread Count', 'write MiB/s', 'Writes/s', 'read MiB/s', 'Reads/s', 'Total Time', 'Latency Min', 'Latency Avg', 'Latency Max', 'Latency 95th']
     summary = ['Summary', '', '', '', '','', '', '', '', '', '', '', '', '', '']
-    summarycolumns = ['Cluster Name', 'PVC', 'Storage Type', 'Environment', 'Test Name','Thread Count', 'write Mb/s', 'Requirement']
-    #summarycolumns = ['Cluster Name', 'PVC', 'Storage Type', 'Environment', 'Test Name','Thread Count', 'write Mb/s']
+    summarycolumns = ['Cluster Name', 'PVC', 'Storage Type', 'Environment', 'Test Name','Thread Count', 'write MiB/s', 'Requirement']
+    #summarycolumns = ['Cluster Name', 'PVC', 'Storage Type', 'Environment', 'Test Name','Thread Count', 'write MiB/s']
     detail = ['Detailed Measurements', '', '', '', '','', '', '', '', '', '', '', '', '', '']
     blank = ['', '', '', '', '','', '', '', '', '', '', '', '', '', '']
     csv_file = "result.csv"
@@ -22,9 +22,9 @@ def toCsv(dict_data):
             for data in dict_copy:
                 if data['Test Name'] == 'rndwr_4k_8' or data['Test Name'] == 'seqwr_1g_2':
                    minumum = throughput if (data['Test Name'] == 'seqwr_1g_2') else latency
-                   data['Requirement'] = 'Recommended to meet the requirement of ' + minumum + ' Mb/s or higher'
+                   data['Requirement'] = 'Recommended to meet the requirement of ' + minumum + ' MiB/s or higher'
                    del data['Latency Max']
-                   del data['read Mb/s']
+                   del data['read MiB/s']
                    del data['Total Time']
                    del data['Latency 95th']
                    del data['Writes/s']
@@ -57,6 +57,8 @@ if __name__=='__main__':
             data = json.load(json_file)
             dict_data = data['log_lines'][0]
             ddata = dict_data.replace("'", "\"")
+            ddata = ddata.replace("write Mb", "write MiB")
+            ddata = ddata.replace("read Mb", "read MiB")
             if ddata!="":
               allData += json.loads(ddata)
     toCsv(allData)
