@@ -2,6 +2,8 @@
 
 Ansible playbooks to collect Storage performance metrics on an OpenShift cluster.
 
+>NB: **to assess if a storage provider, especially for new storage, is suitable to support `ReadWriteOnce` and `ReadWriteMany` volumes for your Cloud Pak workloads, check out this project at https://github.com/IBM/k8s-storage-tests, and perform the storage readiness tests from it. It will give you a good assessment of the particular storage.**
+
 ### Prerequisites
 
 - Ensure you have python 3.6 or later and [pip](https://pip.pypa.io/en/stable/installation/) 21.1.3 or later installed
