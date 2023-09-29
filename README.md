@@ -134,7 +134,7 @@ Ansible playbooks to collect Storage performance metrics on an OpenShift cluster
  
 ### Pulling and loading the required image in airgap environment
 
-This storage performance test suites relies on a container image: `quay.io/ibm-cp4d-public/xsysbench:1.1` This image may not be directly accessible on an aigap cluster. To resolve this, follow the steps below to download the image onto an intermediary host and then copy the image to the airgap cluster, and finally load it into the cluster's private registry.
+This storage performance test suite relies on a container image: `quay.io/ibm-cp4d-public/xsysbench:1.1` This image may not be directly accessible on an aigap cluster. To resolve this, follow the steps below to download the image onto an intermediary host and then copy the image to the airgap cluster, and finally load it into the cluster's private registry.
 
 ```
  # on an intermediary host that can access the image
