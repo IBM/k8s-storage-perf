@@ -132,6 +132,36 @@ Ansible playbooks to collect Storage performance metrics on an OpenShift cluster
    - jobs.csv
    - params.log
  
+### Pulling and loading the required image in airgap environment
+
+This storage performance test suites relies on a container image: `quay.io/ibm-cp4d-public/xsysbench:1.1` This image may not be directly accessible on an aigap cluster. To resolve this, follow the steps below to download the image onto an intermediary host and then copy the image to the airgap cluster, and finally load it into the cluster's private registry.
+
+```
+ # on an intermediary host that can access the image
+ podman pull quay.io/ibm-cp4d-public/xsysbench:1.1
+ podman save -o xsysbench-1.1.tar quay.io/ibm-cp4d-public/xsysbench:1.1
+ 
+ # copy the above .tar file onto the airgap cluster
+ 
+ # on the airgap cluster
+ podman load -i xsysbench-1.1.tar
+ podman tag quay.io/ibm-cp4d-public/xsysbench:1.1 <private-registry>/ibm-cp4d-public/xsysbench:1.1
+ podman tag quay.io/ibm-cp4d-public/xsysbench:1.1 <private-registry>/ibm-cp4d-public/xsysbench:1.1-amd64
+ 
+ podman login -u <uaername> -p <password> <private-registry> --tls-verify=false
+ 
+ podman push <private-registry>/ibm-cp4d-public/xsysbench:1.1
+ podman push <private-registry>/ibm-cp4d-public/xsysbench:1.1-amd64
+ ```
+ 
+Next make sure that in the "params.yml" file, you modify the `imageurl` line to below:
+
+```
+imageurl: <private-registry>/ibm-cp4d-public/xsysbench:1.1
+```
+
+Finally just follow the previous sections to run the test suites.
+
 ### Running the Playbook with the Container
 
 #### Environment Setup
