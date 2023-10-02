@@ -231,13 +231,15 @@ oc delete ns storage-validation-1 --ignore-not-found
 With each run, delete the kuberbetes namespace that you created in [Setup](#setup), you can delete the project
 
 ```
-oc delete project <storage_perf_namespace>
+export STG_PERF_NS=<storage_perf_namespace>
+oc delete project ${STG_PERF_NS}
 ```
 
 OR delete the resources in the project individually
 
 ```
-oc delete job $(oc get jobs -n <storage_perf_namespace> | awk '{ print $1 }') -n <storage_perf_namespace>
-oc delete cm $(oc get cm -n <storage_perf_namespace> | awk '{ print $1 }') -n <storage_perf_namespace>
-oc delete pvc $(oc get pvc -n <storage_perf_namespace> | awk '{ print $1 }') -n <storage_perf_namespace>
+export STG_PERF_NS=<storage_perf_namespace>
+oc delete job $(oc get jobs -n ${STG_PERF_NS} | awk '{ print $1 }') -n ${STG_PERF_NS}
+oc delete cm $(oc get cm -n ${STG_PERF_NS} | awk '{ print $1 }') -n ${STG_PERF_NS}
+oc delete pvc $(oc get pvc -n ${STG_PERF_NS} | awk '{ print $1 }') -n ${STG_PERF_NS}
 ```
