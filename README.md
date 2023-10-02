@@ -239,8 +239,8 @@ OR delete the resources in the project individually
 
 ```
 export STORAGE_PERF_NAMESPACE=<storage_perf_namespace>
-oc delete job $(oc get jobs -n ${STORAGE_PERF_NAMESPACE} | awk '{ print $1 }') -n ${STORAGE_PERF_NAMESPACE}
-oc delete pvc $(oc get pvc -n ${STORAGE_PERF_NAMESPACE} | awk '{ print $1 }') -n ${STORAGE_PERF_NAMESPACE}
+oc delete job $(oc get jobs -n ${STORAGE_PERF_NAMESPACE} | grep -Ev NAME | awk '{ print $1 }') -n ${STORAGE_PERF_NAMESPACE}
+oc delete pvc $(oc get pvc -n ${STORAGE_PERF_NAMESPACE} | grep -Ev NAME | awk '{ print $1 }') -n ${STORAGE_PERF_NAMESPACE}
 # optionally
 oc delete project ${STORAGE_PERF_NAMESPACE}
 ```
