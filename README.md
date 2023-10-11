@@ -22,7 +22,8 @@ Ansible playbooks to collect Storage performance metrics on an OpenShift cluster
   ln -s -f /usr/local/bin/python3 /usr/local/bin/python
   ```
 
-  >NB: if `pip` is not available or is an older version, run the command below to upgrade it, and then check its version again.
+  >NB: if `pip` is not available or is an older version, run the command below to upgrade it, and then check its version again.  If `pip` command
+  can't be found after the below command, add `/usr/local/bin` into your PATH ENV variable.
   
   `python -m pip install --upgrade pip`
   
