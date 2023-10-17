@@ -41,7 +41,7 @@ Ansible playbooks to collect Storage performance metrics on an OpenShift cluster
   
   
   ```
-  # the collection below is deprecated, and optional. If you still have the old code, you might need it
+  # the collection below is deprecated and optional. If you have the old code, you might need it
   ansible-galaxy collection install community.kubernetes
   ```
   
