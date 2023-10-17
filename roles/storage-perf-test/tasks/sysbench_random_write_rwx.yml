@@ -3,7 +3,7 @@
 - name:  Run sysbench random write RWX test
   block:
     - name:  Run sysbench random write RWX test
-      k8s:
+      kubernetes.core.k8s:
         state: present
         definition: "{{ lookup('template', 'sysbench_random_write_rwx.yaml.j2') }}"
         wait: yes

@@ -3,7 +3,7 @@
 - name: Run sysbench sequential write rwo test
   block:
     - name:  Run sysbench sequential write rwo test
-      k8s:
+      kubernetes.core.k8s:
         state: present
         definition: "{{ lookup('template', 'sysbench_sequential_write_rwo.yaml.j2') }}"
         wait: yes

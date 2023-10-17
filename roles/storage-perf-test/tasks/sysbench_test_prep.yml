@@ -1,7 +1,7 @@
 ---
 # Run sysbench test
 - name:  Setup PVCs to run test on
-  k8s:
+  kubernetes.core.k8s:
     state: present
     definition: "{{ lookup('template', 'common-objects.yaml.j2') }}"
 

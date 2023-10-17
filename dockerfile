@@ -27,7 +27,7 @@ RUN python3 -m pip install --no-cache-dir --upgrade pip \
   && pip3 install --no-cache-dir openshift Jinja2 yasha argparse oauthlib \
   && ln -s /usr/bin/python3 /usr/local/bin/python \
   && ansible-galaxy collection install operator_sdk.util \
-  && ansible-galaxy collection install community.kubernetes \
+  && ansible-galaxy collection install kubernetes.core \
   && curl -sL https://github.com/okd-project/okd/releases/download/4.13.0-0.okd-2023-09-03-082426/openshift-client-linux-4.13.0-0.okd-2023-09-03-082426.tar.gz | tar xvz --directory /usr/local/bin/. \
   && chown -R ${USER_UID}:0 ${HOME} && chmod -R ug+rwx ${HOME}
 

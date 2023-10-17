@@ -39,12 +39,6 @@ Ansible playbooks to collect Storage performance metrics on an OpenShift cluster
   
   `ansible-galaxy collection install kubernetes.core`
   
-  
-  ```
-  # the collection below is deprecated and optional. If you have the old code, you might need it
-  ansible-galaxy collection install community.kubernetes
-  ```
-  
    >NB: the `openshift` package installation requires PyYAML >= 5.4.1, and if the existing PyYAML is an older version, then PyYAML's 
    installation will fail. To overcome this issue, manually delete the exsiting PyYAML package as below (adjust the paths in the commands 
    according to the your host environment):
