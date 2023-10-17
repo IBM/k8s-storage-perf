@@ -13,7 +13,7 @@
           status: "True"
 
     - name: Get logs of the sysbench sequential write pod for RWO
-      community.kubernetes.k8s_log:
+      kubernetes.core.k8s_log:
         namespace: "{{ storage_perf_namespace }}"
         label_selectors:
         - job-name=sysbench-sequential-write-rwo
