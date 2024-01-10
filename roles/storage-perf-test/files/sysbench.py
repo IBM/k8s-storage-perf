@@ -1,8 +1,8 @@
 import shutil, os.path, re, sys, subprocess, csv
 
-def runSysbench(threads, fileTotalSize, fileTestMode, fileBlockSize, fileIoMode, fileFsyncFreq, fileExtraFlags):
+def runSysbench(threads, fileTotalSize, fileTestMode, fileBlockSize, fileIoMode, fileFsyncFreq, fileExtraFlags, runTime):
     prepare = ["sysbench", "--threads="+threads, "--file-num="+fileNum, "--test=fileio", "--file-total-size="+fileTotalSize, "--file-test-mode="+fileTestMode, "--file-block-size="+fileBlockSize, "--file-io-mode="+fileIoMode, "--file-fsync-freq="+fileFsyncFreq, "prepare"]
-    runtest = ["sysbench", "--threads="+threads, "--file-num="+fileNum, "--test=fileio", "--file-total-size="+fileTotalSize, "--file-test-mode="+fileTestMode, "--file-block-size="+fileBlockSize, "--file-extra-flags="+fileExtraFlags, "run"]
+    runtest = ["sysbench", "--threads="+threads, "--file-num="+fileNum, "--test=fileio", "--file-total-size="+fileTotalSize, "--file-test-mode="+fileTestMode, "--file-block-size="+fileBlockSize, "--file-extra-flags="+fileExtraFlags, "--file-io-mode="+fileIoMode, "--file-fsync-freq="+fileFsyncFreq, "--time="+runTime, "run"]
     cleanup = ["sysbench", "--threads="+threads, "--file-num="+fileNum, "--test=fileio", "--file-total-size="+fileTotalSize, "--file-test-mode="+fileTestMode, "--file-block-size="+fileBlockSize, "--file-io-mode="+fileIoMode, "--file-fsync-freq="+fileFsyncFreq, "cleanup"]
     p1 = subprocess.Popen(prepare, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL).wait()
     p2 = subprocess.Popen(runtest, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
@@ -36,13 +36,13 @@ def extractValue(text):
         return round(float(value), 1)
     return ''
 
-def runtest(numOfTests, thread, fileTotalSize, fileNum, fileTestMode, fbs, fileIoMode, fileFsyncFreq, fileExtraFlags, environment, clusterName, storageType, pvc):
+def runtest(numOfTests, thread, fileTotalSize, fileNum, fileTestMode, fbs, fileIoMode, fileFsyncFreq, fileExtraFlags, environment, clusterName, storageType, pvc, runTime):
     data={}
     keys=['throughput_read', 'throughput_write', 'file_ops_read', 'file_ops_write', 'total_time', 'latency_min', 'latency_avg', 'latency_max', 'latency_95th']
     for key in keys:
         data[key] = {}
     for i in range(numOfTests):
-        result= runSysbench(thread, fileTotalSize, fileTestMode, fbs, fileIoMode, fileFsyncFreq, fileExtraFlags)
+        result= runSysbench(thread, fileTotalSize, fileTestMode, fbs, fileIoMode, fileFsyncFreq, fileExtraFlags, runTime)
         data['throughput_read'][i] = extractValue(re.findall(".*reads\/s.*\n", result, re.MULTILINE))
         data['throughput_write'][i] = extractValue(re.findall(".*writes\/s.*\n", result, re.MULTILINE))
         data['file_ops_read'][i] = extractValue(re.findall(".*read, MiB\/s.*\n", result, re.MULTILINE))
@@ -62,8 +62,14 @@ def runtest(numOfTests, thread, fileTotalSize, fileNum, fileTestMode, fbs, fileI
     return avgData
 
 if __name__=='__main__':
-    if len(sys.argv) != 13:
-        print("Usage: python3 sysbench.py <threads> <fileTotalSize> <fileNum> <fileTestMode> <fileBlockSize> <fileIoMode> <fileFsyncFreq> <fileExtraFlags> <environment> <clusterName> <storageType> <pvc>")
+    argnumber=0
+    print(sys.argv, flush=True)
+    print("Number of arguments is "+str(len(sys.argv)), flush=True)
+    for argument in sys.argv:
+        print("arg["+str(argnumber)+"] = "+argument, flush=True) 
+        argnumber = argnumber + 1
+    if len(sys.argv) != 14:
+        print("Usage: python3 sysbench.py <threads> <fileTotalSize> <fileNum> <fileTestMode> <fileBlockSize> <fileIoMode> <fileFsyncFreq> <fileExtraFlags> <environment> <clusterName> <storageType> <pvc> <runTime>")
         sys.exit(1)
     numOfTests = 3
     threads=sys.argv[1].split(',')
@@ -78,9 +84,10 @@ if __name__=='__main__':
     clusterName=sys.argv[10]
     storageType=sys.argv[11]
     pvc=sys.argv[12]
+    runTime=sys.argv[13]
     test_results = []
     for thread in threads:
         for fbs in fileBlockSize:
-            res = runtest(numOfTests, thread, fileTotalSize, fileNum, fileTestMode, fbs, fileIoMode, fileFsyncFreq, fileExtraFlags, environment, clusterName, storageType, pvc)
+            res = runtest(numOfTests, thread, fileTotalSize, fileNum, fileTestMode, fbs, fileIoMode, fileFsyncFreq, fileExtraFlags, environment, clusterName, storageType, pvc, runTime)
             test_results.append(res[0])
     print(test_results)
