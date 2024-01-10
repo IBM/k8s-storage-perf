@@ -1,0 +1,71 @@
+
+# OCP Parameters
+ocp_url: <cluster url>
+ocp_username: <username>
+ocp_password: <password>
+ocp_token: <auth token>
+ocp_apikey: <required if neither user/password or token not available>
+
+storageClass_ReadWriteOnce: <rwo storageclass>      # eg "ocs-storagecluster-ceph-rbd"
+storageClass_ReadWriteMany: <rwx storageclass>      # eg "ocs-storagecluster-cephfs"
+
+run_storage_perf: true
+
+arch: amd64  # amd64, ppc64le
+
+############################ STORAGE PERFORMANCE PARAMETERS START #######################
+# vars file for roles/storage-perf-test
+storage_perf_namespace: <namespace>  # openshift namespace/project where jobs will be executed, it will be created by playbook if not already existing.
+logfolder: '.logs'
+#imageurl: quay.io/ibm-cp4d-public/xsysbench:1.1    # <- This will have to be updated eventually
+imageurl: quay.io/vcppds7878/sysbench:cp4d          # <- This is my custom image
+
+cluster_infrastructure: <infrastructure name>
+cluster_name: <cluster name>
+storage_type: <storage name>
+
+# To run the performace jobs on a dedicated compute nodes, set the node label which meet the criteria.
+# The idea is to gather performance data when the jobs are running remotely from a storage node.
+# A cluster administrator can label a node by running this query with appropriate label key/value: 
+# oc label node <node name> "<label_key>=<label_value>" --overwrite
+dedicated_compute_node:
+   label_key: "<optional>"
+   label_value: "<optional>"
+
+rwx_storagesize: 10Gi
+rwo_storagesize: 10Gi
+runTime: 60             # Specify run time in second for the benchmark phase
+ioMode: async           # Specify the IO mode. async | sync. async required for cloud or VMware environments when storage infrastructure is network attached
+fsyncFreq: 0            # Specify how often to call the fsync function. Set to 0 for direct IO below
+extraFlags: direct      # IO flags to use. direct|dsync|sync. direct required for cloud and VMware based environments when storage infrastructure is network attached
+
+#sysbench random read
+sysbench_random_read: true
+rread_threads: 8            # 1,4,8,16, 32, 64
+rread_fileTotalSize: 128m
+rread_fileNum: 128
+rread_fileBlockSize: 4k     # 4k,8k,16k
+
+#sysbench random write
+sysbench_random_write: true
+rwrite_threads: 8           # 1,4,8,16
+rwrite_fileTotalSize: 4096m
+rwrite_fileNum: 4
+rwrite_fileBlockSize: 4k    # 4k,8k,16k
+
+#sysbench sequential read
+sysbench_sequential_read: false
+sread_threads: 2            # 1,2
+sread_fileTotalSize: 4096m
+sread_fileNum: 4
+sread_fileBlockSize: 1g     # 512m,1g
+
+#sysbench sequential false
+sysbench_sequential_write: false
+swrite_threads: 2           # 1,2
+swrite_fileTotalSize: 4096m
+swrite_fileNum: 4
+swrite_fileBlockSize: 1g    # 512m,1g
+
+############################ STORAGE PERFORMANCE PARAMETERS END #########################
+

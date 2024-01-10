@@ -21,13 +21,14 @@ spec:
           - '{{ rread_fileNum }}'
           - 'rndrd'
           - '{{ rread_fileBlockSize }}'
-          - 'async'
-          - '0'
-          - 'dsync'
+          - '{{ ioMode }}'
+          - '{{ fsyncFreq }}'
+          - '{{ extraFlags }}'
           - '{{ cluster_infrastructure }}'
           - '{{ cluster_name }}'
           - '{{ storage_type }}'
           - 'pvc-sysbench-rwo'
+          - '{{ runTime }}'
         volumeMounts:
         - name: tmp-store
           mountPath: /tmp/data
