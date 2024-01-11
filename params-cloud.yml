@@ -62,7 +62,7 @@ rread_fileNum: 4
 rread_fileBlockSize: 4k     # 4k,8k,16k
 
 #sysbench random write
-sysbench_random_write: false
+sysbench_random_write: true
 rwrite_threads: 8           # 1,4,8,16
 rwrite_fileTotalSize: 4096m
 rwrite_fileNum: 4
