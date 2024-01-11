@@ -25,7 +25,7 @@ imageurl: quay.io/vcppds7878/sysbench:cp4d          # <- This is my custom image
 
 cluster_infrastructure: <infrastructure name>       # Optional labels eg ibmcloud, aws, azure, vmware that will be displayed in result CSV file
 cluster_name: <cluster name>                        # Optional labels that will be displayed in result CSV file
-storage_type: <storage vendor>                      # Optional label eg portworx, ocs, <storage vendor> that will be displayed inr esult CSV file
+storage_type: <storage vendor>                      # Optional label eg portworx, ocs, <storage vendor> that will be displayed in result CSV file
 
 # To run the performace jobs on a dedicated compute nodes, set the node label which meet the criteria.
 # The idea is to gather performance data when the jobs are running remotely from a storage node.
