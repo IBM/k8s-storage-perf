@@ -48,10 +48,10 @@ extraFlags: direct      # IO flags to use. direct|dsync|sync. direct required fo
 # - sread                       # Sequential Read test
 # - swrite                      # Sequential Write test
 #
-#{test}_runTime: 60             # Specify run time in second
-#{test}_ioMode: async           # Specify the IO mode. async | sync 
-#{test}_fsyncFreq: 0            # Specify how often to call the fsync function
-#{test}_extraFlags: direct      # IO flags to use. direct|dsync|sync
+#{test}_runTime: {value}        # Specify run time in second. Override the default global of 120 seconds.
+#{test}_ioMode: {value}         # Specify the IO mode: async | sync. Override the default global of async.
+#{test}_fsyncFreq: {value}      # Specify how often to call the fsync function. Override the default global of 0 because we use direct by default.
+#{test}_extraFlags: {value}     # IO flags to use: direct | dsync | sync. Override the default global of direct.
 
 
 #sysbench random read
