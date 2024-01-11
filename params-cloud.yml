@@ -85,7 +85,7 @@ swrite_fileTotalSize: 4096m
 swrite_fileNum: 4
 swrite_fileBlockSize: 1g            # 512m,1g
 swrite_extraFlags: none             # Write to a file like a regular process would when doing large write (flush at close time)
-swrite_ioMode: sync                 # with a single synchornous write
+swrite_ioMode: sync                 # with a single synchronous write. Not sure 1g is the best choice and would need to be investigated with CP teams
 
 ############################ STORAGE PERFORMANCE PARAMETERS END #########################
 # vars file for roles/storage-perf-test/params-cloud.yml                                #
