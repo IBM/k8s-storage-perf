@@ -34,7 +34,11 @@
   - debug:
       var: login_apikey.stdout_lines
     when: login_apikey.stdout_lines is defined
-    
+
+  - name: Cleanup logs directory upon start
+    shell: rm -Rf {{ logfolder }}    
+    when: purgeLogFolder == true
+
   # Storage Performance Collection Suite
   - name: Storage Performance
     include_role:
