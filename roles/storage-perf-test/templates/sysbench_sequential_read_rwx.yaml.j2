@@ -21,14 +21,14 @@ spec:
           - '{{ sread_fileNum }}'
           - 'seqrd'
           - '{{ sread_fileBlockSize }}'
-          - '{{ ioMode }}'
-          - '{{ fsyncFreq }}'
-          - '{{ extraFlags }}'
+          - '{{ sread_ioMode | default(ioMode) }}'
+          - '{{ sread_fsyncFreq | default(fsyncFreq) }}'
+          - '{{ sread_extraFlags | default(extraFlags) }}'
           - '{{ cluster_infrastructure }}'
           - '{{ cluster_name }}'
           - '{{ storage_type }}'
           - 'pvc-sysbench-rwx'
-          - '{{ runTime }}'
+          - '{{ sread_runTime | default(runTime) }}'
         volumeMounts:
         - name: tmp-store
           mountPath: /tmp/data
