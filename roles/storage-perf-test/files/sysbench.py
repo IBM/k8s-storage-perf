@@ -2,7 +2,10 @@ import shutil, os.path, re, sys, subprocess, csv
 
 def runSysbench(threads, fileTotalSize, fileTestMode, fileBlockSize, fileIoMode, fileFsyncFreq, fileExtraFlags, runTime):
     prepare = ["sysbench", "--threads=8", "--file-num="+fileNum, "--test=fileio", "--file-total-size="+fileTotalSize, "--file-test-mode="+fileTestMode, "--file-block-size="+fileBlockSize, "--file-io-mode=async", "--file-fsync-freq=0", "prepare"]
-    runtest = ["sysbench", "--threads="+threads, "--file-num="+fileNum, "--test=fileio", "--file-total-size="+fileTotalSize, "--file-test-mode="+fileTestMode, "--file-block-size="+fileBlockSize, "--file-extra-flags="+fileExtraFlags, "--file-io-mode="+fileIoMode, "--file-fsync-freq="+fileFsyncFreq, "--time="+runTime, "run"]
+    if (fileExtraFlags == "none"):
+        runtest = ["sysbench", "--threads="+threads, "--file-num="+fileNum, "--test=fileio", "--file-total-size="+fileTotalSize, "--file-test-mode="+fileTestMode, "--file-block-size="+fileBlockSize, "--file-io-mode="+fileIoMode, "--file-fsync-freq="+fileFsyncFreq, "--time="+runTime, "run"]
+    else:
+        runtest = ["sysbench", "--threads="+threads, "--file-num="+fileNum, "--test=fileio", "--file-total-size="+fileTotalSize, "--file-test-mode="+fileTestMode, "--file-block-size="+fileBlockSize, "--file-extra-flags="+fileExtraFlags, "--file-io-mode="+fileIoMode, "--file-fsync-freq="+fileFsyncFreq, "--time="+runTime, "run"]
     cleanup = ["sysbench", "--threads=8", "--file-num="+fileNum, "--test=fileio", "--file-total-size="+fileTotalSize, "--file-test-mode="+fileTestMode, "--file-block-size="+fileBlockSize, "--file-io-mode=async", "--file-fsync-freq=0", "cleanup"]
     p1 = subprocess.Popen(prepare, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL).wait()
     p2 = subprocess.Popen(runtest, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
