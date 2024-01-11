@@ -55,7 +55,7 @@ extraFlags: direct      # IO flags to use. direct|dsync|sync. direct required fo
 
 
 #sysbench random read
-sysbench_random_read: true
+sysbench_random_read: false
 rread_threads: 8                     # 1,4,8,16, 32, 64
 rread_fileTotalSize: 4096m
 rread_fileNum: 4
@@ -76,7 +76,7 @@ sread_fileNum: 4
 sread_fileBlockSize: 1g     # 512m,1g
 
 #sysbench sequential false
-sysbench_sequential_write: false
+sysbench_sequential_write: true
 swrite_threads: 2           # 1,2
 swrite_fileTotalSize: 4096m
 swrite_fileNum: 4
