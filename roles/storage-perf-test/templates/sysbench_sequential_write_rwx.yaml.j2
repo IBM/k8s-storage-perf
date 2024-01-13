@@ -21,14 +21,14 @@ spec:
           - '{{ swrite_fileNum }}'
           - 'seqwr'
           - '{{ swrite_fileBlockSize }}'
-          - '{{ swrite_ioMode | default(ioMode) }}'
-          - '{{ swrite_fsyncFreq | default(fsyncFreq) }}'
-          - '{{ swrite_extraFlags | default(extraFlags) }}'
+          - '{{ swrite_ioMode | default(ioMode | default("sync")) }}'
+          - '{{ swrite_fsyncFreq | default(fsyncFreq | default(0)) }}'
+          - '{{ swrite_extraFlags | default(extraFlags | default("none")) }}'
           - '{{ cluster_infrastructure }}'
           - '{{ cluster_name }}'
           - '{{ storage_type }}'
           - 'pvc-sysbench-rwx'
-          - '{{ swrite_runTime | default(runTime) }}'
+          - '{{ swrite_runTime | default(runTime | default(120)) }}'
         volumeMounts:
         - name: tmp-store
           mountPath: /tmp/data

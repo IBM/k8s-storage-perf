@@ -39,6 +39,10 @@
     shell: rm -Rf {{ logfolder }}    
     when: purgeLogFolder == true
 
+  - name: Cleanup old jobs and PVCs
+    shell: oc delete job,pvc --all -n {{ storage_perf_namespace }}    
+    when: purgeOpenshiftCrs == true
+
   # Storage Performance Collection Suite
   - name: Storage Performance
     include_role:

@@ -20,6 +20,7 @@ arch: amd64  # amd64, ppc64le
 storage_perf_namespace: <namespace>                 # openshift namespace/project where jobs will be executed, it will be created by playbook if not already existing.
 logfolder: '.logs'                                  # Where to store the pod sysbench data collected
 purgeLogFolder: true                                # Make sure the logfolder is pourged at the beginning of every run
+purgeOpenshiftCrs: true                             # Make sure old jobs and PVCs are cleanedup from the OpenShift namespace
 #imageurl: quay.io/ibm-cp4d-public/xsysbench:1.1    # <- This will have to be updated eventually
 imageurl: quay.io/vcppds7878/sysbench:cp4d          # <- This is my custom image
 
@@ -37,7 +38,10 @@ dedicated_compute_node:
 
 rwx_storagesize: 10Gi
 rwo_storagesize: 10Gi
-
+#
+# Modified template files to make sure we would be compatible with the test being run using the old params.yml file
+# that does not have these parameters.
+#
 runTime: 120                        # Specify run time in second for the benchmark phase
 ioMode: async                       # Specify the IO mode. async | sync. async required for cloud or VMware environments when storage infrastructure is network attached
 fsyncFreq: 0                        # Specify how often to call the fsync function. Set to 0 for direct IO below
