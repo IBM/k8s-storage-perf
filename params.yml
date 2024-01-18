@@ -34,6 +34,8 @@ dedicated_compute_node:
 rwx_storagesize: 10Gi
 rwo_storagesize: 10Gi
 
+file_extra_flags: dsync
+
 #sysbench random read
 sysbench_random_read: false
 rread_threads: 8            # 1,4,8,16

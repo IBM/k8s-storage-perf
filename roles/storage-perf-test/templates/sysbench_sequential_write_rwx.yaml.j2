@@ -23,7 +23,7 @@ spec:
           - '{{ swrite_fileBlockSize }}'
           - 'async'
           - '0'
-          - 'dsync'
+          - '{{ file_extra_flags }}'
           - '{{ cluster_infrastructure }}'
           - '{{ cluster_name }}'
           - '{{ storage_type }}'
