@@ -11,7 +11,7 @@ storageClass_ReadWriteMany: <rwx storageclass>      # eg "ocs-storagecluster-cep
 
 run_storage_perf: true
 
-arch: amd64  # amd64, ppc64le
+arch: amd64  # amd64, ppc64le, s390x
 
 ############################ STORAGE PERFORMANCE PARAMETERS START #######################
 # vars file for roles/storage-perf-test                                                 #
@@ -23,6 +23,11 @@ purgeLogFolder: true                                # Make sure the logfolder is
 purgeOpenshiftCrs: true                             # Make sure old jobs and PVCs are cleanedup from the OpenShift namespace
 #imageurl: quay.io/ibm-cp4d-public/xsysbench:1.1    # <- This will have to be updated eventually
 imageurl: quay.io/vcppds7878/sysbench:cp4d          # <- This is my custom image
+#
+# The custom image above supports amd64 and s390x. Once its changes have been merged 
+# it will be necessary to rebuild the ppc64le container image so it includes the 
+# updated sysbench.py script
+#
 
 cluster_infrastructure: <infrastructure name>       # Optional labels eg ibmcloud, aws, azure, vmware that will be displayed in result CSV file
 cluster_name: <cluster name>                        # Optional labels that will be displayed in result CSV file
