@@ -1,0 +1,96 @@
+# OCP Parameters
+ocp_url: <cluster url>
+ocp_username: <username>
+ocp_password: <password>
+ocp_token: <auth token>
+ocp_apikey: <required if neither user/password or token not available>
+
+storageClass_ReadWriteOnce: <rwo storageclass>      # eg "ocs-storagecluster-ceph-rbd"
+storageClass_ReadWriteMany: <rwx storageclass>      # eg "ocs-storagecluster-cephfs"
+
+run_storage_perf: true
+
+arch: s390x  # amd64, ppc64le, s390x
+
+############################ STORAGE PERFORMANCE PARAMETERS START #######################
+# vars file for roles/storage-perf-test                                                 #
+#########################################################################################
+
+storage_perf_namespace: <namespace>                 # openshift namespace/project where jobs will be executed, it will be created by playbook if not already existing.
+logfolder: '.logs'                                  # Where to store the pod sysbench data collected
+purgeLogFolder: true                                # Make sure the logfolder is pourged at the beginning of every run
+purgeOpenshiftCrs: true                             # Make sure old jobs and PVCs are cleanedup from the OpenShift namespace
+#imageurl: quay.io/ibm-cp4d-public/xsysbench:1.1    # <- This will have to be updated eventually
+imageurl: quay.io/vcppds7878/sysbench:cp4d          # <- This is my custom image
+
+cluster_infrastructure: <infrastructure name>       # Optional labels eg ibmcloud, aws, azure, vmware that will be displayed in result CSV file
+cluster_name: <cluster name>                        # Optional labels that will be displayed in result CSV file
+storage_type: <storage vendor>                      # Optional label eg portworx, ocs, <storage vendor> that will be displayed in result CSV file
+
+# To run the performace jobs on a dedicated compute nodes, set the node label which meet the criteria.
+# The idea is to gather performance data when the jobs are running remotely from a storage node.
+# A cluster administrator can label a node by running this query with appropriate label key/value:
+# oc label node <node name> "<label_key>=<label_value>" --overwrite
+dedicated_compute_node:
+   label_key: "<optional>"
+   label_value: "<optional>"
+
+rwx_storagesize: 10Gi
+rwo_storagesize: 10Gi
+#
+# Modified template files to make sure we would be compatible with the test being run using the old params.yml file
+# that does not have these parameters.
+#
+runTime: 120                        # Specify run time in second for the benchmark phase
+ioMode: async                       # Specify the IO mode. async | sync. async required for cloud or VMware environments when storage infrastructure is network attached
+fsyncFreq: 0                        # Specify how often to call the fsync function. Set to 0 for direct IO below
+extraFlags: direct                  # IO flags to use. direct|dsync|sync|none. direct required for cloud and VMware based environments when storage infrastructure is network attached
+#
+# Override the 4 parameters above for a specific test with the following settings
+#
+# {test} can take the folloowing values
+# - rread                           # Random Read test
+# - rwrite                          # Random Write test
+# - sread                           # Sequential Read test
+# - swrite                          # Sequential Write test
+#
+#{test}_runTime: {value}            # Specify run time in second. Override the default global of 120 seconds.
+#{test}_ioMode: {value}             # Specify the IO mode: async | sync. Override the default global of async.
+#{test}_fsyncFreq: {value}          # Specify how often to call the fsync function. Override the default global of 0 because we use direct by default.
+#{test}_extraFlags: {value}         # IO flags to use: direct | dsync | sync | none. Override the default global of direct.
+#
+# e.g. We need to run the Random Write test longer just to test using synchronous IOs
+#rwrite_runTime: 300
+#rwrite_ioMode: sync
+
+
+sysbench_random_read: false         # Disabled by default
+rread_threads: 8                    # 1,4,8,16, 32, 64
+rread_fileTotalSize: 4096m
+rread_fileNum: 4
+rread_fileBlockSize: 4k             # 4k,8k,16k
+
+sysbench_random_write: true         # Enabled by default
+rwrite_threads: 8                   # 1,4,8,16
+rwrite_fileTotalSize: 4096m
+rwrite_fileNum: 4
+rwrite_fileBlockSize: 4k            # 4k,8k,16k
+
+sysbench_sequential_read: false     # Disabled by default
+sread_threads: 2                    # 1,2
+sread_fileTotalSize: 4096m
+sread_fileNum: 4
+sread_fileBlockSize: 1g             # 512m,1g
+
+sysbench_sequential_write: true     # Enabled by default
+swrite_threads: 2                   # 1,2
+swrite_fileTotalSize: 4096m
+swrite_fileNum: 4
+swrite_fileBlockSize: 1g            # 512m,1g
+swrite_extraFlags: none             # Write to a file like a regular process would when doing large write (flush at close time)
+swrite_ioMode: sync                 # with a single synchronous write. Not sure 1g is the best choice and would need to be investigated with CP teams
+
+############################ STORAGE PERFORMANCE PARAMETERS END #########################
+# vars file for roles/storage-perf-test/params-cloud-s390.yml                           #
+#########################################################################################
+
