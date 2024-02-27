@@ -27,7 +27,7 @@ spec:
           - '{{ cluster_infrastructure }}'
           - '{{ cluster_name }}'
           - '{{ storage_type }}'
-          - 'pvc-sysbench-rxo'
+          - 'pvc-sysbench-rwx'
           - '{{ rwrite_runTime | default(runTime | default(120)) }}'
         volumeMounts:
         - name: tmp-store
