@@ -67,7 +67,7 @@ pipeline {
                                         ${DOCKER_EXE} system prune -f --all
 
                                         # Inject the docker_image into the build
-                                        sed -i "s|CP4D_VERSION|${CP4D_VERSION}|" ../dockerfile
+                                        sed -i "s|CP4D_VERSION|${CP4D_VERSION}|" ./dockerfile
                                         ./build/build.sh
                  
                                         # Docker Images After Build
@@ -174,7 +174,7 @@ pipeline {
                                         ${DOCKER_EXE} system prune -f --all
 
                                         # Inject the docker_image into the build
-                                        sed -i "s|CP4D_VERSION|${CP4D_VERSION}|" ../dockerfile
+                                        sed -i "s|CP4D_VERSION|${CP4D_VERSION}|" ./dockerfile
                                         ./build/build.sh
                      
                                         # Docker Images After Build
@@ -279,7 +279,7 @@ pipeline {
                                         ${DOCKER_EXE} system prune -f --all
 
                                         # Inject the docker_image into the build
-                                        sed -i "s|CP4D_VERSION|${CP4D_VERSION}|" ../dockerfile
+                                        sed -i "s|CP4D_VERSION|${CP4D_VERSION}|" ./dockerfile
                                         ./build/build.sh
                      
                                         # Docker Images After Build
