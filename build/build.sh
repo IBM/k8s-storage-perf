@@ -2,7 +2,7 @@
 set -ex
 
 scriptdir=`dirname $0`
-docker_file_name=${scriptdir}/dockerfile
+docker_file_name=${scriptdir}/../dockerfile
 docker_registry=${DOCKER_REGISTRY:-"localhost:5000"}
 docker_image=${DOCKER_IMAGE:-"${docker_registry}/k8s-storage-perf"}
 docker_tag=${TAG_ID:-"latest"}
