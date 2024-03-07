@@ -1,10 +1,10 @@
 FROM quay.io/operator-framework/ansible-operator:v1.31.0
 
 LABEL name="k8s-storage-perf" \
-      maintainer="Nathan Brophy <nathan.brophy@ibm.com>" \
+      maintainer="IBM" \
       vendor="IBM" \
-      version="v1.0.1" \
-      release="Version 1.0.1 containerized packaging for the K8s storage performance ansible playbooks" \
+      version="CP4D_VERSION" \
+      release="Containerized packaging for the K8s storage performance ansible playbooks" \
       summary="This is a containerized version of the k8s-storage-perf ansible playbooks" \
       description="This image contains the ansible playbooks for running the storage test execution suite"
 
@@ -17,9 +17,12 @@ ENV PATH ${PATH}:${HOME}/bin
 RUN mkdir /licenses
 COPY LICENSE /licenses
 
-COPY . ${HOME}
-COPY cleanup.sh /usr/local/bin/cleanup.sh
-COPY roles/* ${HOME}/roles/
+COPY bin ${HOME}/bin
+COPY roles ${HOME}/roles
+COPY paramFiles ${HOME}
+COPY LICENSE ${HOME}
+COPY scripts ${HOME}
+COPY scripts/cleanup.sh /usr/local/bin/cleanup.sh
 
 RUN ln -fs ${HOME}/bin/entrypoint /usr/local/bin/entrypoint
 
