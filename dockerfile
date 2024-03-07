@@ -3,7 +3,7 @@ FROM quay.io/operator-framework/ansible-operator:v1.31.0
 LABEL name="k8s-storage-perf" \
       maintainer="IBM" \
       vendor="IBM" \
-      version="CP4D_VERSION" \
+      version="v1.0.1" \
       release="Containerized packaging for the K8s storage performance ansible playbooks" \
       summary="This is a containerized version of the k8s-storage-perf ansible playbooks" \
       description="This image contains the ansible playbooks for running the storage test execution suite"
