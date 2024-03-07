@@ -21,7 +21,7 @@ COPY bin ${HOME}/bin
 COPY roles ${HOME}/roles
 COPY paramFiles ${HOME}
 COPY LICENSE ${HOME}
-COPY scripts ${HOME}
+COPY scripts/del-stg-perf-ns.sh ${HOME}
 COPY scripts/cleanup.sh /usr/local/bin/cleanup.sh
 
 RUN ln -fs ${HOME}/bin/entrypoint /usr/local/bin/entrypoint
