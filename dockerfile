@@ -20,7 +20,7 @@ COPY LICENSE /licenses
 COPY bin ${HOME}/bin
 COPY roles ${HOME}/roles
 COPY *.yml LICENSE *.py *.sh ${HOME}
-COPY scripts/cleanup.sh /usr/local/bin/cleanup.sh
+COPY cleanup.sh /usr/local/bin/cleanup.sh
 
 RUN ln -fs ${HOME}/bin/entrypoint /usr/local/bin/entrypoint
 
