@@ -1,5 +1,5 @@
 pipeline {
-   agent {label 'k8s-storage-perf && x86_64'}
+   agent {label 'health && x86_64'}
    options { skipDefaultCheckout() } 
 
    environment{
@@ -138,7 +138,7 @@ pipeline {
                 when {
                    expression { return params.PPC64LE == true }
                 }
-                agent {label 'k8s-storage-perf && ppc64le && power9'}
+                agent {label 'health && ppc64le && power9'}
                 stages {
                    stage("Clone repo"){
                       steps {
@@ -245,7 +245,7 @@ pipeline {
                 when {
                    expression { return params.PPC64LE == true }
                 }
-                agent {label 'k8s-storage-perf && s390x'}
+                agent {label 'health && s390x'}
                 stages {
                    stage("Clone repo"){
                       steps {
