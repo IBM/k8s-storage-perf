@@ -17,6 +17,8 @@ arch: amd64  # amd64, ppc64le
 # vars file for roles/storage-perf-test
 storage_perf_namespace: <required>  # openshift namespace/project where jobs will be executed, it will be created by playbook if not already existing.
 logfolder: '.logs'
+purgeLogFolder: true                                # Make sure the logfolder is pourged at the beginning of every run
+purgeOpenshiftCrs: true                             # Make sure old jobs and PVCs are cleanedup from the OpenShift namespace
 imageurl: quay.io/ibm-cp4d-public/xsysbench:1.1
 
 cluster_infrastructure: ibmcloud # optional labels eg ibmcloud, aws, azure, vmware
