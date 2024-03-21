@@ -1,8 +1,8 @@
-FROM ubi9:9.3
 
-RUN yum -y update && \
-    yum install -y https://repo.percona.com/yum/percona-release-latest.noarch.rpm && \
-    yum install -y git make gcc unzip wget fio python3 procps
+FROM registry.access.redhat.com/ubi9:9.3
+RUN yum -y update 
+RUN yum install -y https://repo.percona.com/yum/percona-release-latest.noarch.rpm 
+RUN yum install -y  python3 procps
 
 #
 # As not all packages are available from el9 I kept the el8 versions altogether for consistency for now
@@ -23,4 +23,3 @@ WORKDIR /tmp/data
 COPY ./sysbench.py /tmp/
 
 CMD ["/bin/bash","-c","sleep 3600"]
-
