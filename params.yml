@@ -19,7 +19,7 @@ logfolder: '.logs'
 purgeLogFolder: true                                # Make sure the logfolder is pourged at the beginning of every run
 purgeOpenshiftCrs: true                             # Make sure old jobs and PVCs are cleanedup from the OpenShift namespace
 imageurl: docker-na.artifactory.swg-devops.com/hyc-icp4d-sre-team-import-export-docker-local/vcholle1/xsysbench:1.2
-
+#imageurl: docker-na.artifactory.swg-devops.com/hyc-icp4d-sre-team-import-export-docker-local/vcholle1/vcxsysbench:1.2 # Use this image for power arch 
 cluster_infrastructure: ibmcloud # optional labels eg ibmcloud, aws, azure, vmware
 cluster_name: storage-performance-cluster # optional labels 
 storage_type: ocs # optional label eg portworx, ocs, <storage vendor>
