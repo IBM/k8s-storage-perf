@@ -10,9 +10,12 @@ LABEL name="k8s-storage-perf" \
 
 USER 0
 
+ARG architecture
+
 ENV USER_UID=1001
 ENV ANSIBLE_PYTHON_INTERPRETER /usr/local/bin/python
 ENV PATH ${PATH}:${HOME}/bin
+ENV ARCHITECTURE=${architecture}
 
 RUN mkdir /licenses
 COPY LICENSE /licenses
@@ -29,7 +32,7 @@ RUN python3 -m pip install --no-cache-dir --upgrade pip \
   && ln -s /usr/bin/python3 /usr/local/bin/python \
   && ansible-galaxy collection install operator_sdk.util \
   && ansible-galaxy collection install kubernetes.core \
-  && curl -sL https://github.com/okd-project/okd/releases/download/4.13.0-0.okd-2023-09-03-082426/openshift-client-linux-4.13.0-0.okd-2023-09-03-082426.tar.gz | tar xvz --directory /usr/local/bin/. \
+  && curl -sL http://icpfs1.svl.ibm.com/zen/rebuild-binaries/oc/latest/${ARCHITECTURE}/go-latest/oc.tgz | tar xvz --directory /usr/local/bin/. \
   && chown -R ${USER_UID}:0 ${HOME} && chmod -R ug+rwx ${HOME}
 
 USER ${USER_UID}
