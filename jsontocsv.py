@@ -53,9 +53,17 @@ if __name__=='__main__':
     allData = []
     for filename in filenames:
     # Opening JSON file
+        correctindex = 0
         with open(folderPath+filename) as json_file:
             data = json.load(json_file)
-            dict_data = data['log_lines'][0]
+            #
+            # Make sure we skip any debug output
+            #
+            for dataline in data['log_lines']:
+                if 'Environment' in dataline:
+                     break
+                correctindex = correctindex + 1
+            dict_data = data['log_lines'][correctindex]
             ddata = dict_data.replace("'", "\"")
             ddata = ddata.replace("write Mb", "write MiB")
             ddata = ddata.replace("read Mb", "read MiB")

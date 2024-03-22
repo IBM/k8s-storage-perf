@@ -98,6 +98,34 @@ Ansible playbooks to collect Storage performance metrics on an OpenShift cluster
       storage_type: <storage vendor>
       ```
 
+ - Optionally, you can modify the following parameters to alter the processing of the test
+
+      ````
+      purgeLogFolder: true | false                  # Make sure the logfolder is pourged at the beginning of every run
+      purgeOpenshiftCrs: true                       # Make sure old jobs and PVCs are cleaned up from the OpenShift namespace
+      runTime: {seconds}                            # Specify run time in second for the benchmark phasei. Default 120 seconds
+      ioMode: {mode}                                # Specify the IO mode. async | sync. Defaults to async required for cloud or VMware environments
+      fsyncFreq: {n}                                # Specify how often to call the fsync function. Set to 0 for direct IO below. Defaults to 0
+      extraFlags: {io_flag}                         # IO flags to use. direct|dsync|sync|none. Defaults to direct required for cloud and VMware environments
+      ````
+
+ - Optionally, you can override the above values for a specific test
+
+      ````
+      {test}_runTime: {value}                       # Specify run time in second. Override the default global of 120 seconds.
+      {test}_ioMode: {value}                        # Specify the IO mode: async | sync. Override the default global of async.
+      {test}_fsyncFreq: {value}                     # Specify how often to call the fsync function. Override the default global of 0 because we use direct by default.
+      {test}_extraFlags: {value}                    # IO flags to use: direct | dsync | sync | none. Override the default global of direct.
+
+      {test} can take the folloowing values
+      - rread                                       # Random Read test
+      - rwrite                                      # Random Write test
+      - sread                                       # Sequential Read test
+      - swrite                                      # Sequential Write test
+
+      e.g.: rwrite_runTime: 300 to change the run time of the random write test to 300 seconds
+      ````
+
  - Optionally you can run the tests with a "remote mode" where the performance jobs can run on a dedicated compute node. The compute node 
       should be labelled with a defined key and value for this purpose and set in the params file. 
 

@@ -1,0 +1,25 @@
+
+FROM registry.access.redhat.com/ubi9:9.3
+RUN yum -y update 
+RUN yum install -y https://repo.percona.com/yum/percona-release-latest.noarch.rpm 
+RUN yum install -y  python3 procps
+
+#
+# As not all packages are available from el9 I kept the el8 versions altogether for consistency for now
+#
+#RUN yum install -y http://rpmfind.net/linux/epel/9/Everything/s390x/Packages/c/ck-0.7.0-10.el9.s390x.rpm && \
+#    yum install -y http://rpmfind.net/linux/epel/8/Everything/s390x/Packages/l/luajit-2.1.0-0.16beta3.el8.s390x.rpm && \
+#    yum install -y http://rpmfind.net/linux/epel/8/Everything/s390x/Packages/s/sysbench-1.0.20-5.el8.s390x.rpm
+#
+
+RUN yum install -y http://rpmfind.net/linux/epel/8/Everything/s390x/Packages/c/ck-0.6.0-9.el8.s390x.rpm && \
+    yum install -y http://rpmfind.net/linux/epel/8/Everything/s390x/Packages/l/luajit-2.1.0-0.16beta3.el8.s390x.rpm && \
+    yum install -y http://rpmfind.net/linux/epel/8/Everything/s390x/Packages/s/sysbench-1.0.20-5.el8.s390x.rpm
+
+RUN mkdir /tmp/data
+
+WORKDIR /tmp/data
+
+COPY ./sysbench.py /tmp/
+
+CMD ["/bin/bash","-c","sleep 3600"]
