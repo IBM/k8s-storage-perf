@@ -22,7 +22,7 @@ logfolder: '.logs'                                  # Where to store the pod sys
 purgeLogFolder: true                                # Make sure the logfolder is pourged at the beginning of every run
 purgeOpenshiftCrs: true                             # Make sure old jobs and PVCs are cleanedup from the OpenShift namespace
 #imageurl: quay.io/ibm-cp4d-public/xsysbench:1.1    # <- This will have to be updated eventually
-imageurl: quay.io/vcppds7878/sysbench:cp4d          # <- This is my custom image
+imageurl: docker-na.artifactory.swg-devops.com/hyc-icp4d-sre-team-import-export-docker-local/vcholle1/xsysbench:1.2       # <- This is my custom image
 #
 # The custom image above supports amd64 and s390x. Once its changes have been merged 
 # it will be necessary to rebuild the ppc64le container image so it includes the 

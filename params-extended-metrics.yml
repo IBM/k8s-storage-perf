@@ -17,7 +17,9 @@ arch: amd64  # amd64, ppc64le
 # vars file for roles/storage-perf-test
 storage_perf_namespace: <required>  # openshift namespace/project where jobs will be executed, it will be created by playbook if not already existing.
 logfolder: '.logs'
-imageurl: quay.io/ibm-cp4d-public/xsysbench:1.1
+purgeLogFolder: true                                # Make sure the logfolder is pourged at the beginning of every run
+purgeOpenshiftCrs: true  
+imageurl: docker-na.artifactory.swg-devops.com/hyc-icp4d-sre-team-import-export-docker-local/vcholle1/xsysbench:1.2       # <- This is my custom image
 
 cluster_infrastructure: ibmcloud # optional labels eg ibmcloud, aws, azure, vmware
 cluster_name: storage-performance-cluster # optional labels 
@@ -34,7 +36,6 @@ dedicated_compute_node:
 rwx_storagesize: 10Gi
 rwo_storagesize: 10Gi
 
-file_extra_flags: dsync
 
 #sysbench random read
 sysbench_random_read: false

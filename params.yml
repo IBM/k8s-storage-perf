@@ -1,12 +1,12 @@
 # OCP Parameters
-ocp_url: https://<required>:6443
-ocp_username: <required>  # a cluster admin user
-ocp_password: <required>
+ocp_url:  https://api.sre-wld-3m20w-fips-nfs-673-exp.cp.fyre.ibm.com:6443
+ocp_username: kubeadmin  # a cluster admin user
+ocp_password: tuMD5-rxXr2-M4yZv-CC92X
 ocp_token: <required if user/password not available>
 ocp_apikey: <required if neither user/password or token not available>
 
-storageClass_ReadWriteOnce: <required> # eg "ocs-storagecluster-ceph-rbd"
-storageClass_ReadWriteMany: <required>  # eg "ocs-storagecluster-cephfs"
+storageClass_ReadWriteOnce: managed-nfs-storage # eg "ocs-storagecluster-ceph-rbd"
+storageClass_ReadWriteMany: managed-nfs-storage  # eg "ocs-storagecluster-cephfs"
 
 run_storage_perf: true
 
@@ -34,7 +34,6 @@ dedicated_compute_node:
 rwx_storagesize: 10Gi
 rwo_storagesize: 10Gi
 
-file_extra_flags: dsync
 
 #sysbench random read
 sysbench_random_read: false

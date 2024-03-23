@@ -1,11 +1,7 @@
-FROM centos:latest
+FROM registry.access.redhat.com/ubi8-minimal:latest
 
-RUN sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-* && \
-    sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-*
-RUN yum -y update && \
-    yum install -y https://repo.percona.com/yum/percona-release-latest.noarch.rpm && \
-    yum install -y git make gcc unzip wget sysbench python3
-
+RUN rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
+RUN microdnf install -y sysbench python3
 RUN mkdir /tmp/data
 
 WORKDIR /tmp/data
