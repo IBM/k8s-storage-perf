@@ -200,7 +200,7 @@ Finally just follow the previous sections to run the test suites.
 ```sh
 export dockerexe=podman # or docker
 export container_name=k8s-storage-perf
-export docker_image=icr.io/cpopen/cpd/k8s-storage-perf:v1.0.0
+export docker_image=icr.io/cpopen/cpd/k8s-storage-perf:v1.0.1
 
 alias k8s_storage_perf_exec="${dockerexe} exec ${container_name}"
 alias run_k8s_storage_perf="k8s_storage_perf_exec ansible-playbook main.yml --extra-vars \"@/tmp/work-dir/params.yml\" | tee output.log"

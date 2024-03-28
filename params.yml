@@ -1,12 +1,12 @@
 # OCP Parameters
-ocp_url:  https://api.sre-wld-3m20w-fips-nfs-673-exp.cp.fyre.ibm.com:6443
+ocp_url: https://api.cpd.westus2.aroapp.io:6443 
 ocp_username: kubeadmin  # a cluster admin user
-ocp_password: tuMD5-rxXr2-M4yZv-CC92X
+ocp_password: 3JXJy-WYBF5-5YKHR-4pHI9
 ocp_token: <required if user/password not available>
 ocp_apikey: <required if neither user/password or token not available>
 
-storageClass_ReadWriteOnce: managed-nfs-storage # eg "ocs-storagecluster-ceph-rbd"
-storageClass_ReadWriteMany: managed-nfs-storage  # eg "ocs-storagecluster-cephfs"
+storageClass_ReadWriteOnce: ocs-storagecluster-ceph-rbd # eg "ocs-storagecluster-ceph-rbd"
+storageClass_ReadWriteMany: ocs-storagecluster-cephfs  # eg "ocs-storagecluster-cephfs"
 
 run_storage_perf: true
 
@@ -14,7 +14,7 @@ arch: amd64  # amd64, ppc64le
 
 ############################ STORAGE PERFORMANCE PARAMETERS START #######################
 # vars file for roles/storage-perf-test
-storage_perf_namespace: <required>  # openshift namespace/project where jobs will be executed, it will be created by playbook if not already existing.
+storage_perf_namespace: vc1  # openshift namespace/project where jobs will be executed, it will be created by playbook if not already existing.
 logfolder: '.logs'
 purgeLogFolder: true                                # Make sure the logfolder is pourged at the beginning of every run
 purgeOpenshiftCrs: true                             # Make sure old jobs and PVCs are cleanedup from the OpenShift namespace
