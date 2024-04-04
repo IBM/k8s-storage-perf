@@ -1,24 +1,24 @@
 # OCP Parameters
-ocp_url: https://api.cpd.westus2.aroapp.io:6443 
-ocp_username: kubeadmin  # a cluster admin user
-ocp_password: 3JXJy-WYBF5-5YKHR-4pHI9
+ocp_url: https://<required>:6443 
+ocp_username: <required>  # a cluster admin user
+ocp_password: <required>  # a cluster password
 ocp_token: <required if user/password not available>
 ocp_apikey: <required if neither user/password or token not available>
 
-storageClass_ReadWriteOnce: ocs-storagecluster-ceph-rbd # eg "ocs-storagecluster-ceph-rbd"
-storageClass_ReadWriteMany: ocs-storagecluster-cephfs  # eg "ocs-storagecluster-cephfs"
+storageClass_ReadWriteOnce: <required> # eg "ocs-storagecluster-ceph-rbd or portworx-db2-rwo-sc"
+storageClass_ReadWriteMany: <required>  # eg "ocs-storagecluster-cephfs or portworx-rwx-gp3-sc" 
 
 run_storage_perf: true
 
-arch: amd64  # amd64, ppc64le
+arch: amd64  # amd64, ppc64le, s390x
 
 ############################ STORAGE PERFORMANCE PARAMETERS START #######################
 # vars file for roles/storage-perf-test
-storage_perf_namespace: vc1  # openshift namespace/project where jobs will be executed, it will be created by playbook if not already existing.
+storage_perf_namespace: <required>  # openshift namespace/project where jobs will be executed, it will be created by playbook if not already existing.
 logfolder: '.logs'
 purgeLogFolder: true                                # Make sure the logfolder is pourged at the beginning of every run
 purgeOpenshiftCrs: true                             # Make sure old jobs and PVCs are cleanedup from the OpenShift namespace
-imageurl: docker-na.artifactory.swg-devops.com/hyc-icp4d-sre-team-import-export-docker-local/vcholle1/xsysbench:1.2
+imageurl: <imagepath/imagename:tag>
 cluster_infrastructure: ibmcloud # optional labels eg ibmcloud, aws, azure, vmware
 cluster_name: storage-performance-cluster # optional labels 
 storage_type: ocs # optional label eg portworx, ocs, <storage vendor>
@@ -34,6 +34,10 @@ dedicated_compute_node:
 rwx_storagesize: 10Gi
 rwo_storagesize: 10Gi
 
+runTime: 120                        # Specify run time in second for the benchmark phase
+ioMode: async                       # Specify the IO mode. async | sync. async required for cloud or VMware environments when storage infrastructure is network attached
+fsyncFreq: 0                        # Specify how often to call the fsync function. Set to 0 for direct IO below
+extraFlags: direct                  # IO flags to use. direct|dsync|sync|none. direct required for cloud and VMware based environments when storage infrastructure is network attached
 
 #sysbench random read
 sysbench_random_read: false
