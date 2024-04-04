@@ -11,7 +11,7 @@ storageClass_ReadWriteMany: <required>  # eg "ocs-storagecluster-cephfs"
 
 run_storage_perf: true
 
-arch: amd64  # amd64, ppc64le
+arch: amd64  # amd64, ppc64le, s390x
 
 ############################ STORAGE PERFORMANCE PARAMETERS START #######################
 # vars file for roles/storage-perf-test
@@ -36,6 +36,10 @@ dedicated_compute_node:
 rwx_storagesize: 10Gi
 rwo_storagesize: 10Gi
 
+runTime: 120                        # Specify run time in second for the benchmark phase
+ioMode: async                       # Specify the IO mode. async | sync. async required for cloud or VMware environments when storage infrastructure is network attached
+fsyncFreq: 0                        # Specify how often to call the fsync function. Set to 0 for direct IO below
+extraFlags: direct                  # IO flags to use. direct|dsync|sync|none. direct required for cloud and VMware based environments when storage infrastructure is network attached
 
 #sysbench random read
 sysbench_random_read: false
