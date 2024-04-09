@@ -1,4 +1,4 @@
-FROM quay.io/operator-framework/ansible-operator:v1.31.0
+FROM quay.io/operator-framework/ansible-operator:v1.34.1
 
 LABEL name="k8s-storage-perf" \
       maintainer="Nathan Brophy <nathan.brophy@ibm.com>" \
