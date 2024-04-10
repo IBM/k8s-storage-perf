@@ -17,7 +17,7 @@ ENV ANSIBLE_PYTHON_INTERPRETER /usr/local/bin/python
 ENV PATH ${PATH}:${HOME}/bin
 ENV ARCHITECTURE=${architecture}
 
-RUN mkdir /licenses
+RUN mkdir -p /licenses
 COPY LICENSE /licenses
 
 COPY bin ${HOME}/bin
