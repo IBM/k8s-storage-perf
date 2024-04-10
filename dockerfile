@@ -1,4 +1,4 @@
-FROM quay.io/operator-framework/ansible-operator:v1.34.1
+FROM cp.stg.icr.io/cp/cpd/ansible-operator-base:2.0.0-latest
 
 LABEL name="k8s-storage-perf" \
       maintainer="IBM" \
@@ -25,6 +25,10 @@ COPY roles ${HOME}/roles
 COPY *.yml LICENSE *.py *.sh ${HOME}
 COPY cleanup.sh /usr/local/bin/cleanup.sh
 
+RUN microdnf -y install python3-pip \
+    && python3 -m ensurepip \
+    && pip3 --no-cache-dir install --upgrade pip setuptools
+
 RUN ln -fs ${HOME}/bin/entrypoint /usr/local/bin/entrypoint
 
 RUN python3 -m pip install --no-cache-dir --upgrade pip \
@@ -34,6 +38,9 @@ RUN python3 -m pip install --no-cache-dir --upgrade pip \
   && ansible-galaxy collection install kubernetes.core \
   && curl -sL http://icpfs1.svl.ibm.com/zen/rebuild-binaries/oc/latest/${ARCHITECTURE}/go-latest/oc.tgz | tar xvz --directory /usr/local/bin/. \
   && chown -R ${USER_UID}:0 ${HOME} && chmod -R ug+rwx ${HOME}
+
+# clean cache to save image space
+RUN microdnf clean all && rm -rf /var/cache/* /var/log/dnf* /var/log/yum.* /usr/share/zoneinfo
 
 USER ${USER_UID}
 
