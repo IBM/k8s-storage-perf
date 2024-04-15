@@ -1,10 +1,9 @@
+FROM registry.access.redhat.com/ubi9:9.3
 
-FROM registry.access.redhat.com/ubi8:latest
-RUN yum -y update 
-RUN yum install -y https://repo.percona.com/yum/percona-release-latest.noarch.rpm 
-RUN yum install -y  python3 procps
-
-RUN yum install -y http://rpmfind.net/linux/epel/8/Everything/s390x/Packages/c/ck-0.6.0-9.el8.s390x.rpm && \
+RUN yum -y update && \
+    yum install -y https://repo.percona.com/yum/percona-release-latest.noarch.rpm && \
+    yum install -y python3 procps && \
+    yum install -y http://rpmfind.net/linux/epel/8/Everything/s390x/Packages/c/ck-0.6.0-9.el8.s390x.rpm && \
     yum install -y http://rpmfind.net/linux/epel/8/Everything/s390x/Packages/l/luajit-2.1.0-0.16beta3.el8.s390x.rpm && \
     yum install -y http://rpmfind.net/linux/epel/8/Everything/s390x/Packages/s/sysbench-1.0.20-5.el8.s390x.rpm
 
