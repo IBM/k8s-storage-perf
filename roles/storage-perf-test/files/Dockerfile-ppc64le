@@ -1,9 +1,9 @@
-FROM ubi8:latest
+FROM  registry.access.redhat.com/ubi9:9.3
 
 RUN yum -y update && \
     yum install -y https://repo.percona.com/yum/percona-release-latest.noarch.rpm && \
     yum install -y python3 && \
-    yum install -y http://rpmfind.net/linux/epel/8/Everything/ppc64le/Packages/c/ck-0.6.0-9.el8.ppc64le.rpm && \
+    yum install -y http://rpmfind.net/linux/epel/9/Everything/ppc64le/Packages/c/ck-0.7.0-10.el9.ppc64le.rpm && \
     yum install -y http://rpmfind.net/linux/epel/8/Everything/ppc64le/Packages/l/luajit-2.1.0-0.16beta3.el8.ppc64le.rpm && \
     yum install -y http://rpmfind.net/linux/epel/8/Everything/ppc64le/Packages/s/sysbench-1.0.20-5.el8.ppc64le.rpm 
 
@@ -14,4 +14,3 @@ WORKDIR /tmp/data
 COPY ./sysbench.py /tmp/
 
 CMD ["/bin/bash","-c","sleep 3600"]
-
