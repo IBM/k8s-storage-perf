@@ -186,7 +186,7 @@ mkdir -p /tmp/k8s_storage_perf/work-dir
 cp ./params.yml /tmp/k8s_storage_perf/work-dir/params.yml
 
 ${dockerexe} pull ${docker_image}
-${dockerexe} run --name ${container_name} -d -v /tmp/k8s_storage_perf/work-dir:/tmp/work-dir ${docker_image}
+${dockerexe} run --name ${container_name} -d -v /tmp/k8s_storage_perf/work-dir:/tmp/work-dir -v /root/.kube/config:/root/.kube/config:Z -e KUBECONFIG=/root/.kube/config ${docker_image}
 ```
 
 #### Run the Playbook
