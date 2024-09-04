@@ -25,7 +25,12 @@ COPY roles ${HOME}/roles
 COPY *.yml LICENSE *.py *.sh ${HOME}
 COPY cleanup.sh /usr/local/bin/cleanup.sh
 
-RUN microdnf -y install python3-pip \
+RUN mkdir /tmp/data
+COPY roles/storage-perf-test/files/sysbench.py /tmp/
+# EPEL8 has sysbench for: x86_64, s390x, ppc64le
+RUN rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
+
+RUN microdnf -y install python3-pip sysbench \
     && python3 -m ensurepip \
     && pip3 --no-cache-dir install --upgrade pip setuptools
 
