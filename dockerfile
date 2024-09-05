@@ -31,7 +31,6 @@ COPY roles/storage-perf-test/files/sysbench.py /tmp/
 RUN rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
 
 RUN microdnf -y install python3-pip sysbench \
-    && python3 -m ensurepip \
     && pip3 --no-cache-dir install --upgrade pip setuptools
 
 RUN ln -fs ${HOME}/bin/entrypoint /usr/local/bin/entrypoint
