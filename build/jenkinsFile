@@ -164,8 +164,7 @@ pipeline {
                 when {
                    expression { return params.PPC64LE == true }
                 }
-                //agent {label 'health && ppc64le && power9'}
-                agent {label 'ppc64le'}
+                agent {label 'health && ppc64le && power9'}
                 stages {
                    stage("Clone repo"){
                       steps {
