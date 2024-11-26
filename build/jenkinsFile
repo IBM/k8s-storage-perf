@@ -29,6 +29,15 @@ pipeline {
                env.DOCKER_IMAGE="${DOCKER_REGISTRY}/${DOCKER_REPO}/${IMAGE_NAME}"
                env.DOCKER_EXE="podman"
                currentBuild.displayName="BRANCH:${BRANCH}-BUILD_ID:${env.TAG_ID}"
+               
+               env.PLATFORMS="amd64\n"
+               if ( params.PPC64LE == true ){
+                  env.PLATFORMS="${PLATFORMS}\nppc64le"
+               }
+               if ( params.S390X == true ){
+                  env.PLATFORMS="${PLATFORMS}\ns390x"
+               }
+               echo "PLATFORMS: ${PLATFORMS}"
             }
          }
       }
@@ -155,7 +164,8 @@ pipeline {
                 when {
                    expression { return params.PPC64LE == true }
                 }
-                agent {label 'health && ppc64le && power9'}
+                //agent {label 'health && ppc64le && power9'}
+                agent {label 'ppc64le'}
                 stages {
                    stage("Clone repo"){
                       steps {
@@ -433,29 +443,26 @@ pipeline {
                                            --all
                             fi
 
-                            # TAG IMAGES WITH CPD_VER
-                            skopeo copy --preserve-digests --format=v2s2 docker://${DEV_REGISTRY}/${IMAGE_NAME}:${TAG_ID}.amd64 \
-                                        docker://${DEV_REGISTRY}/${IMAGE_NAME}:${CPD_VER}.amd64 \
+
+                            for p in $PLATFORMS
+                            do 
+                               # TAG IMAGES WITH CPD_VER
+                               skopeo copy --preserve-digests --format=v2s2 docker://${DEV_REGISTRY}/${IMAGE_NAME}:${TAG_ID}.${p} \
+                                        docker://${DEV_REGISTRY}/${IMAGE_NAME}:${CPD_VER}.${p} \
                                         --src-creds iamapikey:${ICR_KEY} \
                                         --dest-creds iamapikey:${ICR_KEY} \
                                         --all
-                            skopeo copy --preserve-digests --format=v2s2 docker://${DEV_REGISTRY}/${IMAGE_NAME}:${TAG_ID}.ppc64le \
-                                        docker://${DEV_REGISTRY}/${IMAGE_NAME}:${CPD_VER}.ppc64le \
-                                        --src-creds iamapikey:${ICR_KEY} \
-                                        --dest-creds iamapikey:${ICR_KEY} \
-                                        --all
-                            skopeo copy --preserve-digests --format=v2s2 docker://${DEV_REGISTRY}/${IMAGE_NAME}:${TAG_ID}.s390x \
-                                        docker://${DEV_REGISTRY}/${IMAGE_NAME}:${CPD_VER}.s390x \
-                                        --src-creds iamapikey:${ICR_KEY} \
-                                        --dest-creds iamapikey:${ICR_KEY} \
-                                        --all
-                            
+                            done
+
                             # CREATE FAT MANIFEST
+                            manifest_cmd="manifest create cp.stg.icr.io/cp/cpd/${IMAGE_NAME}:${TAG_ID}"
+                            for p in $PLATFORMS
+                            do 
+                               manifest_cmd="${manifest_cmd} cp.stg.icr.io/cp/cpd/${IMAGE_NAME}:${TAG_ID}.${p}"
+                            done
+                            
                             ${DOCKER_EXE} login ${DEV_REGISTRY} -u iamapikey -p ${ICR_KEY}
-                            ${DOCKER_EXE} manifest create ${DEV_REGISTRY}/${IMAGE_NAME}:${CPD_VER} \
-                               ${DEV_REGISTRY}/${IMAGE_NAME}:${CPD_VER}.amd64 \
-                               ${DEV_REGISTRY}/${IMAGE_NAME}:${CPD_VER}.ppc64le \
-                               ${DEV_REGISTRY}/${IMAGE_NAME}:${CPD_VER}.s390x
+                            ${DOCKER_EXE} ${manifest_cmd}
                             ${DOCKER_EXE} manifest inspect ${DEV_REGISTRY}/${IMAGE_NAME}:${CPD_VER}
                             ${DOCKER_EXE} manifest push --format=v2s2 ${DEV_REGISTRY}/${IMAGE_NAME}:${CPD_VER} docker://${DEV_REGISTRY}/${IMAGE_NAME}:${CPD_VER}
 
