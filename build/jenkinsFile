@@ -286,7 +286,7 @@ pipeline {
              }
              stage('Full s390x build process') {
                 when {
-                   expression { return params.PPC64LE == true }
+                   expression { return params.S390X == true }
                 }
                 agent {label 'health && s390x'}
                 stages {
