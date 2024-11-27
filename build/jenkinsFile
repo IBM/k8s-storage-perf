@@ -454,10 +454,10 @@ pipeline {
                             done
 
                             # CREATE FAT MANIFEST
-                            manifest_cmd="manifest create cp.stg.icr.io/cp/cpd/${IMAGE_NAME}:${TAG_ID}"
+                            manifest_cmd="manifest create cp.stg.icr.io/cp/cpd/${IMAGE_NAME}:${CPD_VER}"
                             for p in $PLATFORMS
                             do 
-                               manifest_cmd="${manifest_cmd} cp.stg.icr.io/cp/cpd/${IMAGE_NAME}:${TAG_ID}.${p}"
+                               manifest_cmd="${manifest_cmd} cp.stg.icr.io/cp/cpd/${IMAGE_NAME}:${CPD_VER}.${p}"
                             done
                             
                             ${DOCKER_EXE} login ${DEV_REGISTRY} -u iamapikey -p ${ICR_KEY}
