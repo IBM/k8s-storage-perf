@@ -36,7 +36,8 @@ COPY cleanup.sh /usr/local/bin/cleanup.sh
 
 RUN mkdir /tmp/data
 COPY roles/storage-perf-test/files/sysbench.py /tmp/
-RUN ln -fs ${HOME}/bin/entrypoint /usr/local/bin/entrypoint
+RUN ln -fs ${HOME}/bin/entrypoint /usr/local/bin/entrypoint \
+    && ln -s /usr/bin/python3 /usr/local/bin/python
 
 # EPEL8 has sysbench for: x86_64, s390x, ppc64le
 RUN rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
