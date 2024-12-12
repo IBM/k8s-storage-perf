@@ -520,7 +520,6 @@ pipeline {
              }
          }
       }
-      
       stage('Run Vulnerability Scans') {
          when {
             expression { return params.SCAN == true }
@@ -530,13 +529,14 @@ pipeline {
                withCredentials([ string(credentialsId: 'mend_userkey', variable: 'WS_USERKEY'),
                                  string(credentialsId: "ws_apikey", variable: 'WS_APIKEY'),
                                  string(credentialsId: "sonar_storage-perf", variable: 'SONAR_KEY') ]){
-                  sh '${WORKSPACE}/build/mend.sh'
-                  sh '${WORKSPACE}/build/sonar.sh'
+                  dir ("${IMAGE_NAME}"){
+                     sh './build/mend.sh'
+                     sh './build/sonar.sh'
+                  }
                }
             }
          }
       }
-      
    }
    post {
       success{
