@@ -570,7 +570,7 @@ pipeline {
                            then
                               echo ${clean_string}
                            else
-                              git commit -m "OLM-UTILS BUILD ${TAG_ID}"
+                              git commit -m "${IMAGE_NAME} BUILD ${TAG_ID}"
                               git push origin ${CPD_VER}
                            fi
                         '''
