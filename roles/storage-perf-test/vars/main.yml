@@ -2,14 +2,6 @@
 # vars file for roles/storage-perf-test
 logfolder: '.logs'
 
-cluster_infrastructure: AWS
-cluster_name: femippo-ffpdv
-storage_type: portworx
-rwx_storagesize: 10Gi
-storageClass_ReadWriteMany: portworx-shared-gp3
-rwo_storagesize: 10Gi
-storageClass_ReadWriteOnce: portworx-shared-gp3
-
 #sysbench ocs random read
 sysbench_random_read: true
 rread_threads: 1,4,8,16
