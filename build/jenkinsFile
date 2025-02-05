@@ -75,9 +75,8 @@ pipeline {
                                                 string(credentialsId: 'JAMES_ICR_STAGING', variable: 'ICR_KEY')]) {                               
                                   dir ("${IMAGE_NAME}"){                  
                                      sh '''                        
-                                        ${DOCKER_EXE} login -u ${DOCKER_USER} -p ${DOCKER_PASS} docker.io  
-                                        ${DOCKER_EXE} login cp.stg.icr.io -u iamapikey -p ${ICR_KEY}
-
+                                        ${DOCKER_EXE} login -u ${DOCKER_USER} -p ${DOCKER_PASS} docker.io
+                                        
                                         # Docker Images Before Build
                                         ${DOCKER_EXE} images
                                         ${DOCKER_EXE} ps -a
@@ -198,8 +197,7 @@ pipeline {
                                                 string(credentialsId: 'JAMES_ICR_STAGING', variable: 'ICR_KEY')]) {                               
                                   dir ("${IMAGE_NAME}"){                  
                                      sh '''                        
-                                        ${DOCKER_EXE} login -u ${DOCKER_USER} -p ${DOCKER_PASS} docker.io  
-                                        ${DOCKER_EXE} login cp.stg.icr.io -u iamapikey -p ${ICR_KEY}
+                                        ${DOCKER_EXE} login -u ${DOCKER_USER} -p ${DOCKER_PASS} docker.io
 
                                         # Docker Images Before Build
                                         ${DOCKER_EXE} images
@@ -319,8 +317,7 @@ pipeline {
                                                 string(credentialsId: 'JAMES_ICR_STAGING', variable: 'ICR_KEY')]) {                               
                                   dir ("${IMAGE_NAME}"){                  
                                      sh '''                        
-                                        ${DOCKER_EXE} login -u ${DOCKER_USER} -p ${DOCKER_PASS} docker.io  
-                                        ${DOCKER_EXE} login cp.stg.icr.io -u iamapikey -p ${ICR_KEY}
+                                        ${DOCKER_EXE} login -u ${DOCKER_USER} -p ${DOCKER_PASS} docker.io
 
                                         # Docker Images Before Build
                                         ${DOCKER_EXE} images
