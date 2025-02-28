@@ -43,15 +43,15 @@ def runtest(numOfTests, thread, fileTotalSize, fileNum, fileTestMode, fbs, fileI
         data[key] = {}
     for i in range(numOfTests):
         result= runSysbench(thread, fileTotalSize, fileTestMode, fbs, fileIoMode, fileFsyncFreq, fileExtraFlags)
-        data['throughput_read'][i] = extractValue(re.findall(".*reads\/s.*\n", result, re.MULTILINE))
-        data['throughput_write'][i] = extractValue(re.findall(".*writes\/s.*\n", result, re.MULTILINE))
-        data['file_ops_read'][i] = extractValue(re.findall(".*read, MiB\/s.*\n", result, re.MULTILINE))
-        data['file_ops_write'][i] = extractValue(re.findall(".*written, MiB\/s.*\n", result, re.MULTILINE))
-        data['total_time'][i] = extractValue(re.findall(".*total time.*\n", result, re.MULTILINE))
-        data['latency_min'][i] = extractValue(re.findall(".*min.*\n", result, re.MULTILINE))
-        data['latency_avg'][i] = extractValue(re.findall(".*avg.*\n", result, re.MULTILINE))
-        data['latency_max'][i] = extractValue(re.findall(".*max.*\n", result, re.MULTILINE))
-        data['latency_95th'][i] = extractValue(re.findall(".*95th.*\n", result, re.MULTILINE))
+        data['throughput_read'][i] = extractValue(re.findall(r".*reads/s.*\n", result, re.MULTILINE))
+        data['throughput_write'][i] = extractValue(re.findall(r".*writes/s.*\n", result, re.MULTILINE))
+        data['file_ops_read'][i] = extractValue(re.findall(r".*read, MiB/s.*\n", result, re.MULTILINE))
+        data['file_ops_write'][i] = extractValue(re.findall(r".*written, MiB/s.*\n", result, re.MULTILINE))
+        data['total_time'][i] = extractValue(re.findall(r".*total time.*\n", result, re.MULTILINE))
+        data['latency_min'][i] = extractValue(re.findall(r".*min.*\n", result, re.MULTILINE))
+        data['latency_avg'][i] = extractValue(re.findall(r".*avg.*\n", result, re.MULTILINE))
+        data['latency_max'][i] = extractValue(re.findall(r".*max.*\n", result, re.MULTILINE))
+        data['latency_95th'][i] = extractValue(re.findall(r".*95th.*\n", result, re.MULTILINE))
     data['thread_count'] = thread
     data['test_name'] = fileTestMode+"_"+fbs+"_"+thread
     data['environment'] = environment
