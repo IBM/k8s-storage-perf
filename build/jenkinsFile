@@ -10,7 +10,7 @@ pipeline {
       //DOCKER REPOS
       IMAGE_NAME="k8s-storage-perf"
       DEV_REGISTRY="cp.stg.icr.io/cp/cpd"
-      DOCKER_REGISTRY="quay.io/jammurp"      
+      DOCKER_REGISTRY="cpd-quay.svl.ibm.com"      
       PROD_REGISTRY="icr.io/cpopen/cpd"
       
       /////Mend OSS Scan variables/////
@@ -101,7 +101,7 @@ pipeline {
                             echo "NODE_NAME = ${env.NODE_NAME}"
 
                             withEnv(['ARC_TYPE=amd64']){
-                              withCredentials([usernamePassword(credentialsId: 'JAMES_QUAY', usernameVariable: 'QUAY_USER', passwordVariable: 'QUAY_KEY')]) {
+                              withCredentials([usernamePassword(credentialsId: 'CPD_QUAY', usernameVariable: 'QUAY_USER', passwordVariable: 'QUAY_KEY')]) {
                                  sh '''
                                     # PUSH IMAGE TO QUAY
                                     ${DOCKER_EXE} login ${DOCKER_REGISTRY} -u ${QUAY_USER} -p ${QUAY_KEY}
@@ -130,7 +130,7 @@ pipeline {
                   
                             withEnv(['ARC_TYPE=amd64']){
                               withCredentials([string(credentialsId: 'JAMES_ICR_STAGING', variable: 'ICR_KEY'),
-                                               usernamePassword(credentialsId: 'JAMES_QUAY', usernameVariable: 'QUAY_USER', passwordVariable: 'QUAY_KEY')]) {
+                                               usernamePassword(credentialsId: 'CPD_QUAY', usernameVariable: 'QUAY_USER', passwordVariable: 'QUAY_KEY')]) {
                                  sh '''
                                     # PUSH IMAGE TO ICR STAGING
                                     skopeo copy --preserve-digests --format=v2s2 docker://${DOCKER_REGISTRY}/${IMAGE_NAME}:${TAG_ID}.${ARC_TYPE} \
@@ -213,7 +213,7 @@ pipeline {
                             echo "NODE_NAME = ${env.NODE_NAME}"
 
                             withEnv(['ARC_TYPE=ppc64le']){
-                              withCredentials([usernamePassword(credentialsId: 'JAMES_QUAY', usernameVariable: 'QUAY_USER', passwordVariable: 'QUAY_KEY')]) {
+                              withCredentials([usernamePassword(credentialsId: 'CPD_QUAY', usernameVariable: 'QUAY_USER', passwordVariable: 'QUAY_KEY')]) {
                                  sh '''
                                     # PUSH IMAGE TO QUAY
                                     ${DOCKER_EXE} login ${DOCKER_REGISTRY} -u ${QUAY_USER} -p ${QUAY_KEY}
@@ -242,7 +242,7 @@ pipeline {
                   
                             withEnv(['ARC_TYPE=ppc64le']){
                               withCredentials([string(credentialsId: 'JAMES_ICR_STAGING', variable: 'ICR_KEY'),
-                                               usernamePassword(credentialsId: 'JAMES_QUAY', usernameVariable: 'QUAY_USER', passwordVariable: 'QUAY_KEY')]) {
+                                               usernamePassword(credentialsId: 'CPD_QUAY', usernameVariable: 'QUAY_USER', passwordVariable: 'QUAY_KEY')]) {
                                  sh '''
                                     # PUSH IMAGE TO ICR STAGING
                                     skopeo copy --preserve-digests --format=v2s2 docker://${DOCKER_REGISTRY}/${IMAGE_NAME}:${TAG_ID}.${ARC_TYPE} \
@@ -323,7 +323,7 @@ pipeline {
                             echo "NODE_NAME = ${env.NODE_NAME}"
 
                             withEnv(['ARC_TYPE=s390x']){
-                              withCredentials([usernamePassword(credentialsId: 'JAMES_QUAY', usernameVariable: 'QUAY_USER', passwordVariable: 'QUAY_KEY')]) {
+                              withCredentials([usernamePassword(credentialsId: 'CPD_QUAY', usernameVariable: 'QUAY_USER', passwordVariable: 'QUAY_KEY')]) {
                                  sh '''
                                     # PUSH IMAGE TO QUAY
                                     ${DOCKER_EXE} login ${DOCKER_REGISTRY} -u ${QUAY_USER} -p ${QUAY_KEY}
@@ -352,7 +352,7 @@ pipeline {
                   
                             withEnv(['ARC_TYPE=s390x']){
                               withCredentials([string(credentialsId: 'JAMES_ICR_STAGING', variable: 'ICR_KEY'),
-                                               usernamePassword(credentialsId: 'JAMES_QUAY', usernameVariable: 'QUAY_USER', passwordVariable: 'QUAY_KEY')]) {
+                                               usernamePassword(credentialsId: 'CPD_QUAY', usernameVariable: 'QUAY_USER', passwordVariable: 'QUAY_KEY')]) {
                                  sh '''
                                     # PUSH IMAGE TO ICR STAGING
                                     skopeo copy --preserve-digests --format=v2s2 docker://${DOCKER_REGISTRY}/${IMAGE_NAME}:${TAG_ID}.${ARC_TYPE} \
