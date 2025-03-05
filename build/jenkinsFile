@@ -10,7 +10,7 @@ pipeline {
       //DOCKER REPOS
       IMAGE_NAME="k8s-storage-perf"
       DEV_REGISTRY="cp.stg.icr.io/cp/cpd"
-      DOCKER_REGISTRY="cpd-quay.svl.ibm.com"      
+      DOCKER_REGISTRY="cpd-quay.svl.ibm.com/cpd-cli"      
       PROD_REGISTRY="icr.io/cpopen/cpd"
       
       /////Mend OSS Scan variables/////
