@@ -1,13 +1,13 @@
 
 # OCP Parameters
-ocp_url: https://<required>:6443
-ocp_username: <required>  # a cluster admin user
-ocp_password: <required>
+ocp_url: https://api.perfdedicated601.cp.fyre.ibm.com:6443
+ocp_username: kubeadmin  # a cluster admin user
+ocp_password: ddIMX-KuvFE-Kot9A-5BbnK
 ocp_token: <required if user/password not available>
 ocp_apikey: <required if neither user/password or token not available>
 
-storageClass_ReadWriteOnce: <required> # eg "ocs-storagecluster-ceph-rbd"
-storageClass_ReadWriteMany: <required>  # eg "ocs-storagecluster-cephfs"
+storageClass_ReadWriteOnce: ocs-storagecluster-ceph-rbd # eg "ocs-storagecluster-ceph-rbd"
+storageClass_ReadWriteMany: ocs-storagecluster-cephfs  # eg "ocs-storagecluster-cephfs"
 
 run_storage_perf: true
 
@@ -15,12 +15,12 @@ arch: amd64  # amd64, ppc64le
 
 ############################ STORAGE PERFORMANCE PARAMETERS START #######################
 # vars file for roles/storage-perf-test
-storage_perf_namespace: <required>  # openshift namespace/project where jobs will be executed, it will be created by playbook if not already existing.
+storage_perf_namespace: k8sspf  # openshift namespace/project where jobs will be executed, it will be created by playbook if not already existing.
 logfolder: '.logs'
-imageurl: quay.io/ibm-cp4d-public/xsysbench:1.1
+imageurl: icr.io/cpopen/cpd/k8s-storage-perf:5.2.1.amd64
 
-cluster_infrastructure: ibmcloud # optional labels eg ibmcloud, aws, azure, vmware
-cluster_name: storage-performance-cluster # optional labels 
+cluster_infrastructure: fyre # optional labels eg ibmcloud, aws, azure, vmware
+cluster_name: D601 # optional labels 
 storage_type: ocs # optional label eg portworx, ocs, <storage vendor>
 
 # To run the performace jobs on a dedicated compute nodes, set the node label which meet the criteria.
