@@ -137,30 +137,30 @@ Ansible playbooks to collect Storage performance metrics on an OpenShift cluster
  
 ### Pulling and loading the required image in airgap environment
 
-This storage performance test suite relies on a container image: `quay.io/ibm-cp4d-public/xsysbench:1.1` This image may not be directly accessible on an aigap cluster. To resolve this, follow the steps below to download the image onto an intermediary host and then copy the image to the airgap cluster, and finally load it into the cluster's private registry.
+This storage performance test suite relies on a container image: `icr.io/cpopen/cpd/k8s-storage-perf:5.2.1` This image may not be directly accessible on an aigap cluster. To resolve this, follow the steps below to download the image onto an intermediary host and then copy the image to the airgap cluster, and finally load it into the cluster's private registry.
 
 ```
  # on an intermediary host that can access the image
- podman pull quay.io/ibm-cp4d-public/xsysbench:1.1
- podman save -o xsysbench-1.1.tar quay.io/ibm-cp4d-public/xsysbench:1.1
+ podman pull icr.io/cpopen/cpd/k8s-storage-perf:5.2.1
+ podman save -o k8s-storage-perf.tar icr.io/cpopen/cpd/k8s-storage-perf:5.2.1
  
  # copy the above .tar file onto the airgap cluster
  
  # on the airgap cluster
- podman load -i xsysbench-1.1.tar
- podman tag quay.io/ibm-cp4d-public/xsysbench:1.1 <private-registry>/ibm-cp4d-public/xsysbench:1.1
- podman tag quay.io/ibm-cp4d-public/xsysbench:1.1 <private-registry>/ibm-cp4d-public/xsysbench:1.1-amd64
+ podman load -i k8s-storage-perf.tar
+ podman tag icr.io/cpopen/cpd/k8s-storage-perf:5.2.1 <private-registry>/cpopen/cpd/k8s-storage-perf:5.2.1
+ podman tag icr.io/cpopen/cpd/k8s-storage-perf:5.2.1 <private-registry>/cpopen/cpd/k8s-storage-perf:5.2.1.amd64
  
  podman login -u <uaername> -p <password> <private-registry> --tls-verify=false
  
- podman push <private-registry>/ibm-cp4d-public/xsysbench:1.1
- podman push <private-registry>/ibm-cp4d-public/xsysbench:1.1-amd64
+ podman push <private-registry>/cpopen/cpd/k8s-storage-perf:5.2.1
+ podman push <private-registry>/cpopen/cpd/k8s-storage-perf:5.2.1.amd64
  ```
  
 Next make sure that in the "params.yml" file, you modify the `imageurl` line to below:
 
 ```
-imageurl: <private-registry>/ibm-cp4d-public/xsysbench:1.1
+imageurl: <private-registry>/cpopen/cpd/k8s-storage-perf:5.2.1
 ```
 
 Finally just follow the previous sections to run the test suites.
@@ -172,7 +172,7 @@ Finally just follow the previous sections to run the test suites.
 ```sh
 export dockerexe=podman # or docker
 export container_name=k8s-storage-perf
-export docker_image=icr.io/cpopen/cpd/k8s-storage-perf:v1.0.0
+export docker_image=icr.io/cpopen/cpd/k8s-storage-perf:5.2.1
 
 alias k8s_storage_perf_exec="${dockerexe} exec ${container_name}"
 alias run_k8s_storage_perf="k8s_storage_perf_exec ansible-playbook main.yml --extra-vars \"@/tmp/work-dir/params.yml\" | tee output.log"
