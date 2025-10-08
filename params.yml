@@ -1,8 +1,8 @@
 
 # OCP Parameters
-ocp_url: https://api.perfdedicated601.cp.fyre.ibm.com:6443
-ocp_username: kubeadmin  # a cluster admin user
-ocp_password: ddIMX-KuvFE-Kot9A-5BbnK
+ocp_url: https://<required_domain_name>:6443
+ocp_username: <required>  # a cluster admin user
+ocp_password: <required>
 ocp_token: <required if user/password not available>
 ocp_apikey: <required if neither user/password or token not available>
 
