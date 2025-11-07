@@ -82,8 +82,7 @@ pipeline {
                                         # Setup Clean Build Environment
                                         ${DOCKER_EXE} system prune -f --all
 
-                                        # Inject the docker_image into the build
-                                        sed -i "s|CP4D_VERSION|${CP4D_VERSION}|" ./dockerfile
+                                        # RUN BUILD SCRIPT
                                         ./build/build.sh
                  
                                         # Docker Images After Build

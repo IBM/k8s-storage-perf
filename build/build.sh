@@ -19,4 +19,5 @@ fi
 
 ${dockerexe} build --format docker ${nocache} -f ${docker_file_name} \
              -t ${docker_image}:${docker_tag}.${arch_type} \
-             --build-arg "architecture=${arch_type}" .
+             --build-arg "architecture=${arch_type}"
+             --build-arg "version=${docker_tag}" .
