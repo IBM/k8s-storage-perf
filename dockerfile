@@ -1,7 +1,8 @@
 ARG architecture
-ARG version
 
 FROM --platform=linux/${architecture} cp.stg.icr.io/cp/cpd/ansible-operator-base:latest
+
+ARG version
 
 LABEL name="k8s-storage-perf" \
       maintainer="IBM" \
@@ -11,7 +12,7 @@ LABEL name="k8s-storage-perf" \
       summary="This is a containerized version of the k8s-storage-perf ansible playbooks" \
       description="This image contains the ansible playbooks for running the storage test execution suite"
 
-
+ARG architecture
 
 USER 0
 
