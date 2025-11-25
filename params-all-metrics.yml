@@ -31,9 +31,10 @@ dedicated_compute_node:
    label_key: "<optional>"
    label_value: "<optional>"
 
-# The size of persistent volume claims (PVCs) for ReadWriteOnce (RWO) storage classes.
+# The size of persistent volume claims (PVCs) for ReadWriteMany (RWX) storage classes.
 # If your storage provider offers different storage tiers or if the volume size limits the IOPS capacity,
 # follow the guidance from your storage provider to ensure you have sufficient IOPS. 
+
 rwx_storagesize: 10Gi
 # The size of persistent volume claims (PVCs) for ReadWriteOnce (RWO) storage classes.
 # If your storage provider offers different storage tiers or if the volume size limits the IOPS capacity,
