@@ -40,7 +40,7 @@ rwx_storagesize: 10Gi
 # If your storage provider offers different storage tiers or if the volume size limits the IOPS capacity,
 # follow the guidance from your storage provider to ensure you have sufficient IOPS. 
 rwo_storagesize: 10Gi
-
+# use of any other value other than dsync will lead to misleading results and cannot be used to compare against the recommended values in tool output
 file_extra_flags: dsync
 
 #sysbench random read
