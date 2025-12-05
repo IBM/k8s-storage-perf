@@ -163,6 +163,11 @@ Next make sure that in the "params.yml" file, you modify the `imageurl` line to 
 imageurl: <private-registry>/cpopen/cpd/k8s-storage-perf:5.2.1
 ```
 
+Note the 3 different configuration files and what they do:
+- params.yml   - the most effective setting to show the required metrics as documented in the CPD knowledge center  (write only, 8 threads for latency based, 2 threads for throughput based)
+- params-extended-metrics.yml  -  cover above, still write only tests but with more thread counts (1, 4, 8 16)
+- params-all-metrics.yml  - cover above, but added read IOs as well with same list of thread count (1, 4, 8, 16)
+
 Finally just follow the previous sections to run the test suites.
 
 ### Running the Playbook with the Container
