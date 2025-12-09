@@ -17,7 +17,7 @@ arch: amd64  # amd64, ppc64le
 # vars file for roles/storage-perf-test
 storage_perf_namespace: <required>  # openshift namespace/project where jobs will be executed, it will be created by playbook if not already existing.
 logfolder: '.logs'
-imageurl: icr.io/cpopen/cpd/k8s-storage-perf:5.2.1
+imageurl: icr.io/cpopen/cpd/k8s-storage-perf:5.2.2
 
 cluster_infrastructure: ibmcloud # optional labels eg ibmcloud, aws, azure, vmware
 cluster_name: storage-performance-cluster # optional labels 
