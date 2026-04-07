@@ -20,7 +20,8 @@ pipeline {
       
       //VERSION TAGS TO BE USED BY THE BUILD - PASSED IN FROM JENKINS
       CPD_VER="${CP4D_VERSION}"
-      
+      DATACORE_VERSION="${CP4D_VERSION.split('\\.').size() == 4 ? CP4D_VERSION.split('\\.')[0..2].join('.') : CP4D_VERSION}"
+
       // SLACK CHANNEL
       SLACK_CHANNEL="#${SLACK_CHANNEL}"
    }
@@ -538,7 +539,7 @@ pipeline {
                   
                      dir ('cpd-cli-bundle'){
                         deleteDir()
-                        git  branch: "${CPD_VER}", credentialsId: "${GIT_CREDENTIALS_ID}", url: "${BUNDLE_GHE_URL}" , poll: false
+                        git  branch: "${DATACORE_VERSION}", credentialsId: "${GIT_CREDENTIALS_ID}", url: "${BUNDLE_GHE_URL}" , poll: false
                      
                         sh '''
                            cd ./stable/case/ibm-cp4d-cpd-cli/inventory/health
@@ -556,7 +557,7 @@ pipeline {
                               echo ${clean_string}
                            else
                               git commit -m "${IMAGE_NAME} BUILD ${TAG_ID}"
-                              git push origin ${CPD_VER}
+                              git push origin ${DATACORE_VERSION}
                            fi
                         '''
                      }
