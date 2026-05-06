@@ -38,8 +38,6 @@ spec:
         volumeMounts:
         - name: tmp-store
           mountPath: /tmp/data
-        - name: tmp-ansible
-          mountPath: /tmp
         - name: ansible-tmp
           mountPath: /opt/ansible/.ansible/tmp
       volumes:
@@ -47,8 +45,6 @@ spec:
         persistentVolumeClaim:
           claimName: pvc-sysbench-rwx
           readOnly: false
-      - name: tmp-ansible
-        emptyDir: {}
       - name: ansible-tmp
         emptyDir: {}
       restartPolicy: Never
