@@ -13,6 +13,13 @@ spec:
       containers:
       - name: sysbench-sequential-write-rwo
         image: {{ storage_perf_image }}
+        securityContext:
+          readOnlyRootFilesystem: true
+          allowPrivilegeEscalation: false
+          runAsNonRoot: true
+          capabilities:
+            drop:
+              - ALL
         command: ["python3"]
         args:
           - '/tmp/sysbench.py'
@@ -31,9 +38,17 @@ spec:
         volumeMounts:
         - name: tmp-store
           mountPath: /tmp/data
+        - name: tmp-ansible
+          mountPath: /tmp
+        - name: ansible-tmp
+          mountPath: /opt/ansible/.ansible/tmp
       volumes:
       - name: tmp-store
         persistentVolumeClaim:
           claimName: pvc-sysbench-rwo
           readOnly: false
+      - name: tmp-ansible
+        emptyDir: {}
+      - name: ansible-tmp
+        emptyDir: {}
       restartPolicy: Never

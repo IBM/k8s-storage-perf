@@ -28,6 +28,8 @@ RUN echo "${USER_NAME}:x:${USER_UID}:0:${USER_NAME} user:${HOME}:/sbin/nologin" 
 ENV ANSIBLE_PYTHON_INTERPRETER /usr/local/bin/python
 ENV PATH ${PATH}:${HOME}/bin
 ENV ARCHITECTURE=${architecture}
+ENV ANSIBLE_LOCAL_TEMP=/tmp/.ansible/tmp
+ENV ANSIBLE_REMOTE_TEMP=/tmp/.ansible/tmp
 
 RUN mkdir -p /licenses
 COPY --chown=${USER_UID}:0 LICENSE /licenses
