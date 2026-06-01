@@ -1,4 +1,5 @@
 import shutil, os.path, re, sys, subprocess, csv
+from datetime import datetime
 
 def runSysbench(threads, fileTotalSize, fileTestMode, fileBlockSize, fileIoMode, fileFsyncFreq, fileExtraFlags):
     prepare = ["sysbench", "--threads="+threads, "--file-num="+fileNum, "--test=fileio", "--file-total-size="+fileTotalSize, "--file-test-mode="+fileTestMode, "--file-block-size="+fileBlockSize, "--file-io-mode="+fileIoMode, "--file-fsync-freq="+fileFsyncFreq, "prepare"]
@@ -20,7 +21,9 @@ def getAvg(subDict):
 
 def computeAvgs(data, threads):
     dict_data = [
-        {'Environment': data['environment'], 'Cluster Name': data['cluster_name'], 'Storage Type': data['storage_type'], 'PVC': data['pvc'], 'Test Name': data['test_name'], 'Thread Count': data['thread_count'], 'Reads/s': getAvg(data['throughput_read']), 
+        {'Environment': data['environment'], 'Cluster Name': data['cluster_name'], 'Storage Type': data['storage_type'], 'PVC': data['pvc'], 'Test Name': data['test_name'], 'Thread Count': data['thread_count'],
+        'Test Start Time': data['start_time'], 'Test End Time': data['end_time'],
+        'Reads/s': getAvg(data['throughput_read']),
         'Writes/s': getAvg(data['throughput_write']), 'read MiB/s': getAvg(data['file_ops_read']), 'write MiB/s': getAvg(data['file_ops_write']), 'Total Time': getAvg(data['total_time']),
         'Latency Min': getAvg(data['latency_min']), 'Latency Avg': getAvg(data['latency_avg']), 'Latency Max': getAvg(data['latency_max']), 'Latency 95th': getAvg(data['latency_95th'])},
     ]
@@ -41,6 +44,10 @@ def runtest(numOfTests, thread, fileTotalSize, fileNum, fileTestMode, fbs, fileI
     keys=['throughput_read', 'throughput_write', 'file_ops_read', 'file_ops_write', 'total_time', 'latency_min', 'latency_avg', 'latency_max', 'latency_95th']
     for key in keys:
         data[key] = {}
+    
+    # Capture test start time
+    start_time = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S UTC')
+    
     for i in range(numOfTests):
         result= runSysbench(thread, fileTotalSize, fileTestMode, fbs, fileIoMode, fileFsyncFreq, fileExtraFlags)
         data['throughput_read'][i] = extractValue(re.findall(r".*reads/s.*\n", result, re.MULTILINE))
@@ -52,12 +59,18 @@ def runtest(numOfTests, thread, fileTotalSize, fileNum, fileTestMode, fbs, fileI
         data['latency_avg'][i] = extractValue(re.findall(r".*avg.*\n", result, re.MULTILINE))
         data['latency_max'][i] = extractValue(re.findall(r".*max.*\n", result, re.MULTILINE))
         data['latency_95th'][i] = extractValue(re.findall(r".*95th.*\n", result, re.MULTILINE))
+    
+    # Capture test end time
+    end_time = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S UTC')
+    
     data['thread_count'] = thread
     data['test_name'] = fileTestMode+"_"+fbs+"_"+thread
     data['environment'] = environment
     data['cluster_name'] = clusterName
     data['storage_type'] = storageType
     data['pvc'] = pvc
+    data['start_time'] = start_time
+    data['end_time'] = end_time
     avgData = computeAvgs(data, thread)
     return avgData
 

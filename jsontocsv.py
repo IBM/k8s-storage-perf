@@ -5,12 +5,12 @@ throughput = '128'
 latency = '11'
 
 def toCsv(dict_data):
-    columns = ['Cluster Name', 'PVC', 'Storage Type', 'Environment', 'Test Name','Thread Count', 'write MiB/s', 'Writes/s', 'read MiB/s', 'Reads/s', 'Total Time', 'Latency Min', 'Latency Avg', 'Latency Max', 'Latency 95th']
-    summary = ['Summary', '', '', '', '','', '', '', '', '', '', '', '', '', '']
-    summarycolumns = ['Cluster Name', 'PVC', 'Storage Type', 'Environment', 'Test Name','Thread Count', 'write MiB/s', 'Requirement']
+    columns = ['Cluster Name', 'PVC', 'Storage Type', 'Environment', 'Test Name','Thread Count', 'Test Start Time', 'Test End Time', 'write MiB/s', 'Writes/s', 'read MiB/s', 'Reads/s', 'Total Time', 'Latency Min', 'Latency Avg', 'Latency Max', 'Latency 95th']
+    summary = ['Summary', '', '', '', '','', '', '', '', '', '', '', '', '', '', '', '']
+    summarycolumns = ['Cluster Name', 'PVC', 'Storage Type', 'Environment', 'Test Name','Thread Count', 'Test Start Time', 'Test End Time', 'write MiB/s', 'Requirement']
     #summarycolumns = ['Cluster Name', 'PVC', 'Storage Type', 'Environment', 'Test Name','Thread Count', 'write MiB/s']
-    detail = ['Detailed Measurements', '', '', '', '','', '', '', '', '', '', '', '', '', '']
-    blank = ['', '', '', '', '','', '', '', '', '', '', '', '', '', '']
+    detail = ['Detailed Measurements', '', '', '', '','', '', '', '', '', '', '', '', '', '', '', '']
+    blank = ['', '', '', '', '','', '', '', '', '', '', '', '', '', '', '', '']
     csv_file = "result.csv"
     try:
         with open(csv_file, 'w') as csvfile:
@@ -31,6 +31,7 @@ def toCsv(dict_data):
                    del data['Reads/s']
                    del data['Latency Avg']
                    del data['Latency Min']
+                   # Keep Test Start Time and Test End Time in summary
                    summarycolumnwriter.writerow(data)
             blankwriter = csv.DictWriter(csvfile, fieldnames=blank)
             blankwriter.writeheader()
