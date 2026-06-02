@@ -5,14 +5,27 @@ def runSysbench(threads, fileTotalSize, fileTestMode, fileBlockSize, fileIoMode,
     prepare = ["sysbench", "--threads="+threads, "--file-num="+fileNum, "--test=fileio", "--file-total-size="+fileTotalSize, "--file-test-mode="+fileTestMode, "--file-block-size="+fileBlockSize, "--file-io-mode="+fileIoMode, "--file-fsync-freq="+fileFsyncFreq, "prepare"]
     runtest = ["sysbench", "--threads="+threads, "--file-num="+fileNum, "--test=fileio", "--file-total-size="+fileTotalSize, "--file-test-mode="+fileTestMode, "--file-block-size="+fileBlockSize, "--file-extra-flags="+fileExtraFlags, "run"]
     cleanup = ["sysbench", "--threads="+threads, "--file-num="+fileNum, "--test=fileio", "--file-total-size="+fileTotalSize, "--file-test-mode="+fileTestMode, "--file-block-size="+fileBlockSize, "--file-io-mode="+fileIoMode, "--file-fsync-freq="+fileFsyncFreq, "cleanup"]
-    p1 = subprocess.Popen(prepare, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL).wait()
-    p2 = subprocess.Popen(runtest, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
+    
+    # Run prepare phase
+    p1 = subprocess.Popen(prepare, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    prep_out, prep_err = p1.communicate()
+    if p1.returncode != 0:
+        print(f"Prepare phase failed: {prep_err.decode('utf-8')}")
+        return None
+    
+    # Run test phase
+    p2 = subprocess.Popen(runtest, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out, err = p2.communicate()
-    if err is None:
-        return out.decode("utf-8")
-    print(err)
-    p3 = subprocess.Popen(cleanup, stdout=subprocess.PIPE).wait()
-    return None
+    
+    # Run cleanup phase
+    p3 = subprocess.Popen(cleanup, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    p3.communicate()
+    
+    if p2.returncode != 0:
+        print(f"Test phase failed: {err.decode('utf-8')}")
+        return None
+    
+    return out.decode("utf-8")
 
 def getAvg(subDict):
     if subDict and len(subDict.values()) > 0:
@@ -55,7 +68,11 @@ def runtest(numOfTests, thread, fileTotalSize, fileNum, fileTestMode, fbs, fileI
     start_time = datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S UTC')
     
     for i in range(numOfTests):
-        result= runSysbench(thread, fileTotalSize, fileTestMode, fbs, fileIoMode, fileFsyncFreq, fileExtraFlags)
+        result = runSysbench(thread, fileTotalSize, fileTestMode, fbs, fileIoMode, fileFsyncFreq, fileExtraFlags)
+        if result is None:
+            print(f"Test {i+1} failed, skipping...")
+            continue
+        
         data['throughput_read'][i] = extractValue(re.findall(r".*reads/s.*\n", result, re.MULTILINE))
         data['throughput_write'][i] = extractValue(re.findall(r".*writes/s.*\n", result, re.MULTILINE))
         data['file_ops_read'][i] = extractValue(re.findall(r".*read, MiB/s.*\n", result, re.MULTILINE))
