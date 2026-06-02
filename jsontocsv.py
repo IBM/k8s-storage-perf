@@ -50,16 +50,32 @@ if __name__=='__main__':
         print("Usage: python jsontocsv.py <folder_name>")
         sys.exit(1)
     folderPath = sys.argv[1]+"/"
-    filenames=[x[2] for x in os.walk(folderPath)][0]
+    
+    # Check if folder exists and has files
+    walk_results = list(os.walk(folderPath))
+    if not walk_results or len(walk_results[0][2]) == 0:
+        print(f"Error: No log files found in {folderPath}")
+        sys.exit(1)
+    
+    filenames = walk_results[0][2]
     allData = []
     for filename in filenames:
-    # Opening JSON file
-        with open(folderPath+filename) as json_file:
-            data = json.load(json_file)
-            dict_data = data['log_lines'][0]
-            ddata = dict_data.replace("'", "\"")
-            ddata = ddata.replace("write Mb", "write MiB")
-            ddata = ddata.replace("read Mb", "read MiB")
-            if ddata!="":
-              allData += json.loads(ddata)
+        try:
+            # Opening JSON file
+            with open(folderPath+filename) as json_file:
+                data = json.load(json_file)
+                dict_data = data['log_lines'][0]
+                ddata = dict_data.replace("'", "\"")
+                ddata = ddata.replace("write Mb", "write MiB")
+                ddata = ddata.replace("read Mb", "read MiB")
+                if ddata!="":
+                    allData += json.loads(ddata)
+        except (KeyError, json.JSONDecodeError, IndexError) as e:
+            print(f"Warning: Skipping {filename} due to error: {e}")
+            continue
+    
+    if not allData:
+        print("Error: No valid data found in log files")
+        sys.exit(1)
+    
     toCsv(allData)
