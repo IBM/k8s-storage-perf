@@ -2,6 +2,14 @@
 # Run sysbench test
 - name:  Run sysbench random write RWX test
   block:
+    - name: Delete existing sysbench random write rwx job if present
+      kubernetes.core.k8s:
+        state: absent
+        api_version: batch/v1
+        kind: Job
+        namespace: "{{ storage_perf_namespace }}"
+        name: sysbench-random-write-rwx
+
     - name:  Run sysbench random write RWX test
       kubernetes.core.k8s:
         state: present

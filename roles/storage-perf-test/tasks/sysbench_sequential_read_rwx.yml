@@ -2,6 +2,14 @@
 # Run sysbench test
 - name: Run sysbench sequential read RWX test
   block:
+    - name: Delete existing sysbench sequential read rwx job if present
+      kubernetes.core.k8s:
+        state: absent
+        api_version: batch/v1
+        kind: Job
+        namespace: "{{ storage_perf_namespace }}"
+        name: sysbench-sequential-read-rwx
+
     - name:  Run sysbench sequential read RWX test
       kubernetes.core.k8s:
         state: present
