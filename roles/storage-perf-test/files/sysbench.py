@@ -1,5 +1,5 @@
 import shutil, os.path, re, sys, subprocess, csv
-from datetime import datetime
+from datetime import datetime, timezone
 
 def runSysbench(threads, fileTotalSize, fileTestMode, fileBlockSize, fileIoMode, fileFsyncFreq, fileExtraFlags):
     prepare = ["sysbench", "--threads="+threads, "--file-num="+fileNum, "--test=fileio", "--file-total-size="+fileTotalSize, "--file-test-mode="+fileTestMode, "--file-block-size="+fileBlockSize, "--file-io-mode="+fileIoMode, "--file-fsync-freq="+fileFsyncFreq, "prepare"]
@@ -16,7 +16,10 @@ def runSysbench(threads, fileTotalSize, fileTestMode, fileBlockSize, fileIoMode,
 
 def getAvg(subDict):
     if subDict and len(subDict.values()) > 0:
-        return round(sum(subDict.values())* 1.0/len(subDict.values()), 1)
+        # Filter out non-numeric values (empty strings, None, etc.)
+        numeric_values = [v for v in subDict.values() if isinstance(v, (int, float)) and v != '']
+        if numeric_values:
+            return round(sum(numeric_values) * 1.0 / len(numeric_values), 1)
     return 0
 
 def computeAvgs(data, threads):
@@ -36,8 +39,11 @@ def extractValue(text):
         value = values[len(values)-1]
         if value[-1] == 's':
             value = value[:-1]
-        return round(float(value), 1)
-    return ''
+        try:
+            return round(float(value), 1)
+        except (ValueError, TypeError):
+            return 0
+    return 0
 
 def runtest(numOfTests, thread, fileTotalSize, fileNum, fileTestMode, fbs, fileIoMode, fileFsyncFreq, fileExtraFlags, environment, clusterName, storageType, pvc):
     data={}
@@ -46,7 +52,7 @@ def runtest(numOfTests, thread, fileTotalSize, fileNum, fileTestMode, fbs, fileI
         data[key] = {}
     
     # Capture test start time
-    start_time = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S UTC')
+    start_time = datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S UTC')
     
     for i in range(numOfTests):
         result= runSysbench(thread, fileTotalSize, fileTestMode, fbs, fileIoMode, fileFsyncFreq, fileExtraFlags)
@@ -61,7 +67,7 @@ def runtest(numOfTests, thread, fileTotalSize, fileNum, fileTestMode, fbs, fileI
         data['latency_95th'][i] = extractValue(re.findall(r".*95th.*\n", result, re.MULTILINE))
     
     # Capture test end time
-    end_time = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S UTC')
+    end_time = datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S UTC')
     
     data['thread_count'] = thread
     data['test_name'] = fileTestMode+"_"+fbs+"_"+thread
