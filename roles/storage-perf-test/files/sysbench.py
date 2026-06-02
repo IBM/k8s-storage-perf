@@ -102,6 +102,10 @@ if __name__=='__main__':
     if len(sys.argv) != 13:
         print("Usage: python3 sysbench.py <threads> <fileTotalSize> <fileNum> <fileTestMode> <fileBlockSize> <fileIoMode> <fileFsyncFreq> <fileExtraFlags> <environment> <clusterName> <storageType> <pvc>")
         sys.exit(1)
+    
+    # Change to writable directory for sysbench test files
+    os.chdir('/tmp/data')
+    
     numOfTests = 3
     threads=sys.argv[1].split(',')
     fileTotalSize=sys.argv[2]
