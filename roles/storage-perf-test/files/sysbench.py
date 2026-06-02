@@ -2,9 +2,10 @@ import shutil, os.path, re, sys, subprocess, csv
 from datetime import datetime, timezone
 
 def runSysbench(threads, fileTotalSize, fileTestMode, fileBlockSize, fileIoMode, fileFsyncFreq, fileExtraFlags):
-    prepare = ["sysbench", "--threads="+threads, "--file-num="+fileNum, "--test=fileio", "--file-total-size="+fileTotalSize, "--file-test-mode="+fileTestMode, "--file-block-size="+fileBlockSize, "--file-io-mode="+fileIoMode, "--file-fsync-freq="+fileFsyncFreq, "prepare"]
-    runtest = ["sysbench", "--threads="+threads, "--file-num="+fileNum, "--test=fileio", "--file-total-size="+fileTotalSize, "--file-test-mode="+fileTestMode, "--file-block-size="+fileBlockSize, "--file-extra-flags="+fileExtraFlags, "run"]
-    cleanup = ["sysbench", "--threads="+threads, "--file-num="+fileNum, "--test=fileio", "--file-total-size="+fileTotalSize, "--file-test-mode="+fileTestMode, "--file-block-size="+fileBlockSize, "--file-io-mode="+fileIoMode, "--file-fsync-freq="+fileFsyncFreq, "cleanup"]
+    # Updated sysbench syntax - removed deprecated --test=fileio option
+    prepare = ["sysbench", "fileio", "--threads="+threads, "--file-num="+fileNum, "--file-total-size="+fileTotalSize, "--file-test-mode="+fileTestMode, "--file-block-size="+fileBlockSize, "--file-io-mode="+fileIoMode, "--file-fsync-freq="+fileFsyncFreq, "prepare"]
+    runtest = ["sysbench", "fileio", "--threads="+threads, "--file-num="+fileNum, "--file-total-size="+fileTotalSize, "--file-test-mode="+fileTestMode, "--file-block-size="+fileBlockSize, "--file-extra-flags="+fileExtraFlags, "run"]
+    cleanup = ["sysbench", "fileio", "--threads="+threads, "--file-num="+fileNum, "--file-total-size="+fileTotalSize, "--file-test-mode="+fileTestMode, "--file-block-size="+fileBlockSize, "--file-io-mode="+fileIoMode, "--file-fsync-freq="+fileFsyncFreq, "cleanup"]
     
     # Run prepare phase
     p1 = subprocess.Popen(prepare, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
