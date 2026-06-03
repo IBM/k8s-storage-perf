@@ -20,6 +20,8 @@ spec:
           capabilities:
             drop:
               - ALL
+            add:
+              - SYS_ADMIN
         command: ["python3"]
         args:
           - '/tmp/sysbench.py'

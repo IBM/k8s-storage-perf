@@ -20,7 +20,8 @@ logfolder: '.logs'
 #imageurl: icr.io/cpopen/cpd/k8s-storage-perf:5.2.2
 #imageurl: cp.stg.icr.io/cp/cpd/k8s-storage-perf:5.4.0.20260602.122953.169.amd64
 #imageurl: cp.stg.icr.io/cp/cpd/k8s-storage-perf:5.4.0.1.20260602.131423.170.amd64
-imageurl: cp.stg.icr.io/cp/cpd/k8s-storage-perf:5.4.0.20260602.142831.173.amd64
+#imageurl: cp.stg.icr.io/cp/cpd/k8s-storage-perf:5.4.0.1.20260602.171047.175.amd64
+imageurl: cp.stg.icr.io/cp/cpd/k8s-storage-perf:5.4.0.20260602.180010.176.amd64
 
 cluster_infrastructure: aws # optional labels eg ibmcloud, aws, azure, vmware
 cluster_name: fsx-540 # optional labels 
@@ -45,10 +46,11 @@ rwx_storagesize: 10Gi
 rwo_storagesize: 10Gi
 
 # I/O mode and fsync settings for sysbench tests
-# ioMode: sync (for synchronous I/O with dsync) or async (for asynchronous I/O)
-# fsyncFreq: frequency of fsync() calls (0 = disabled, >0 = call fsync after N operations)
-# file_extra_flags: additional flags for open() syscall (dsync for direct synchronous I/O)
-ioMode: sync
+# ioMode: async with dsync flag forces O_DSYNC behavior
+# fsyncFreq: do fsync() after this number of requests (0 = don't use fsync, default=100)
+# file_extra_flags: dsync adds O_DSYNC flag for direct synchronous writes to disk
+# For true dsync behavior: ioMode=async, fsyncFreq=0, file_extra_flags=dsync
+ioMode: async
 fsyncFreq: 0
 file_extra_flags: dsync
 
