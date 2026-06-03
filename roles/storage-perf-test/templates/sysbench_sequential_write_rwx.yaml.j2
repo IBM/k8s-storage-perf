@@ -9,6 +9,7 @@ spec:
     metadata:
       name: sysbench-sequential-write-rwx
     spec:
+      serviceAccountName: storage-perf-sa
       {{ cm.nodeAffinity() | indent(6) }}
       containers:
       - name: sysbench-sequential-write-rwx

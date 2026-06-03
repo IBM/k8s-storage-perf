@@ -9,6 +9,7 @@ spec:
     metadata:
       name: sysbench-random-read-rwx
     spec:
+      serviceAccountName: storage-perf-sa
       {{ cm.nodeAffinity() | indent(6) }}
       containers:
       - name: sysbench-random-read-rwx
