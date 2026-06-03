@@ -64,12 +64,19 @@ if __name__=='__main__':
             # Opening JSON file
             with open(folderPath+filename) as json_file:
                 data = json.load(json_file)
-                dict_data = data['log_lines'][0]
-                ddata = dict_data.replace("'", "\"")
-                ddata = ddata.replace("write Mb", "write MiB")
-                ddata = ddata.replace("read Mb", "read MiB")
-                if ddata!="":
-                    allData += json.loads(ddata)
+                # Find the line with the actual results (list of dicts)
+                dict_data = None
+                for line in data['log_lines']:
+                    if line.startswith('[{'):
+                        dict_data = line
+                        break
+                
+                if dict_data:
+                    ddata = dict_data.replace("'", "\"")
+                    ddata = ddata.replace("write Mb", "write MiB")
+                    ddata = ddata.replace("read Mb", "read MiB")
+                    if ddata!="":
+                        allData += json.loads(ddata)
         except (KeyError, json.JSONDecodeError, IndexError) as e:
             print(f"Warning: Skipping {filename} due to error: {e}")
             continue
