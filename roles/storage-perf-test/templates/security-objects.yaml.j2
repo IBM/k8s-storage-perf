@@ -1,5 +1,11 @@
 ---
 apiVersion: v1
+kind: Namespace
+metadata:
+  name: {{ storage_perf_namespace }}
+spec: {}
+---
+apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: storage-perf-sa
