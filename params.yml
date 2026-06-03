@@ -1,13 +1,13 @@
 
 # OCP Parameters
-ocp_url: https://<required_domain_name>:6443
-ocp_username: <required>  # a cluster admin user
-ocp_password: <required>
+ocp_url: https://api.sre-cld-ldap-fsx-540-tar-g2.cpdonawsonline.com:6443
+ocp_username: ocadmin  # a cluster admin user
+ocp_password: password
 ocp_token: <required if user/password not available>
 ocp_apikey: <required if neither user/password or token not available>
 
-storageClass_ReadWriteOnce: ocs-storagecluster-ceph-rbd # eg "ocs-storagecluster-ceph-rbd"
-storageClass_ReadWriteMany: ocs-storagecluster-cephfs  # eg "ocs-storagecluster-cephfs"
+storageClass_ReadWriteOnce: ontap-nas # eg "ocs-storagecluster-ceph-rbd"
+storageClass_ReadWriteMany: ontap-nas  # eg "ocs-storagecluster-cephfs"
 
 run_storage_perf: true
 
@@ -17,11 +17,14 @@ arch: amd64  # amd64, ppc64le
 # vars file for roles/storage-perf-test
 storage_perf_namespace: k8sspf  # openshift namespace/project where jobs will be executed, it will be created by playbook if not already existing.
 logfolder: '.logs'
-imageurl: icr.io/cpopen/cpd/k8s-storage-perf:5.2.2
+#imageurl: icr.io/cpopen/cpd/k8s-storage-perf:5.2.2
+#imageurl: cp.stg.icr.io/cp/cpd/k8s-storage-perf:5.4.0.20260602.122953.169.amd64
+#imageurl: cp.stg.icr.io/cp/cpd/k8s-storage-perf:5.4.0.1.20260602.131423.170.amd64
+imageurl: cp.stg.icr.io/cp/cpd/k8s-storage-perf:5.4.0.20260602.142831.173.amd64
 
-cluster_infrastructure: fyre # optional labels eg ibmcloud, aws, azure, vmware
-cluster_name: D601 # optional labels 
-storage_type: ocs # optional label eg portworx, ocs, <storage vendor>
+cluster_infrastructure: aws # optional labels eg ibmcloud, aws, azure, vmware
+cluster_name: fsx-540 # optional labels 
+storage_type: fsx # optional label eg portworx, ocs, <storage vendor>
 
 # To run the performace jobs on a dedicated compute nodes, set the node label which meet the criteria.
 # The idea is to gather performance data when the jobs are running remotely from a storage node.
@@ -41,8 +44,12 @@ rwx_storagesize: 10Gi
 # follow the guidance from your storage provider to ensure you have sufficient IOPS. 
 rwo_storagesize: 10Gi
 
-# Do not change the file_extra_flags setting. You must use dsync to ensure that the output of the 
-# storage performance tool is accurate.
+# I/O mode and fsync settings for sysbench tests
+# ioMode: sync (for synchronous I/O with dsync) or async (for asynchronous I/O)
+# fsyncFreq: frequency of fsync() calls (0 = disabled, >0 = call fsync after N operations)
+# file_extra_flags: additional flags for open() syscall (dsync for direct synchronous I/O)
+ioMode: sync
+fsyncFreq: 0
 file_extra_flags: dsync
 
 #sysbench random read
