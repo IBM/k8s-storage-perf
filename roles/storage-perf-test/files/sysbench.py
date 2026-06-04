@@ -14,8 +14,8 @@ def runSysbench(threads, fileTotalSize, fileTestMode, fileBlockSize, fileIoMode,
     print(f"Running sysbench command: {' '.join(runtest)}")
     print(f"Working directory: {os.getcwd()}")
     
-    # Run prepare phase
-    p1 = subprocess.Popen(prepare, stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd='/tmp/data')
+    # Run prepare phase - all commands run in /tmp/work (writable with readOnlyRootFilesystem)
+    p1 = subprocess.Popen(prepare, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     prep_out, prep_err = p1.communicate()
     if p1.returncode != 0:
         print(f"Prepare phase failed: {prep_err.decode('utf-8')}")
@@ -102,33 +102,26 @@ def runtest(numOfTests, thread, fileTotalSize, fileNum, fileTestMode, fbs, fileI
     data['pvc'] = pvc
     data['start_time'] = start_time
     data['end_time'] = end_time
-    avgData = computeAvgs(data, thread)
-    return avgData
-
-if __name__=='__main__':
-    if len(sys.argv) != 13:
-        print("Usage: python3 sysbench.py <threads> <fileTotalSize> <fileNum> <fileTestMode> <fileBlockSize> <fileIoMode> <fileFsyncFreq> <fileExtraFlags> <environment> <clusterName> <storageType> <pvc>")
-        sys.exit(1)
     
-    # Change to writable directory for sysbench test files
-    os.chdir('/tmp/data')
+    return computeAvgs(data, thread)
+
+if __name__ == "__main__":
+    thread = sys.argv[1]
+    fileTotalSize = sys.argv[2]
+    fileNum = sys.argv[3]
+    fileTestMode = sys.argv[4]
+    fbs = sys.argv[5]
+    fileIoMode = sys.argv[6]
+    fileFsyncFreq = sys.argv[7]
+    fileExtraFlags = sys.argv[8]
+    environment = sys.argv[9]
+    clusterName = sys.argv[10]
+    storageType = sys.argv[11]
+    pvc = sys.argv[12]
     
     numOfTests = 3
-    threads=sys.argv[1].split(',')
-    fileTotalSize=sys.argv[2]
-    fileNum=sys.argv[3]
-    fileTestMode=sys.argv[4]
-    fileBlockSize=sys.argv[5].split(',')
-    fileIoMode=sys.argv[6]
-    fileFsyncFreq=sys.argv[7]
-    fileExtraFlags=sys.argv[8]
-    environment=sys.argv[9]
-    clusterName=sys.argv[10]
-    storageType=sys.argv[11]
-    pvc=sys.argv[12]
-    test_results = []
-    for thread in threads:
-        for fbs in fileBlockSize:
-            res = runtest(numOfTests, thread, fileTotalSize, fileNum, fileTestMode, fbs, fileIoMode, fileFsyncFreq, fileExtraFlags, environment, clusterName, storageType, pvc)
-            test_results.append(res[0])
-    print(test_results)
+    
+    result = runtest(numOfTests, thread, fileTotalSize, fileNum, fileTestMode, fbs, fileIoMode, fileFsyncFreq, fileExtraFlags, environment, clusterName, storageType, pvc)
+    print(result)
+
+# Made with Bob
