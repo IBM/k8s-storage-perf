@@ -42,7 +42,7 @@ spec:
         - name: ansible-tmp
           mountPath: /opt/ansible/.ansible/tmp
         - name: tmp-dir
-          mountPath: /tmp
+          mountPath: /tmp/work
       volumes:
       - name: tmp-store
         persistentVolumeClaim:
