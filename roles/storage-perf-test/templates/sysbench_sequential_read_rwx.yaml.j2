@@ -41,11 +41,15 @@ spec:
           mountPath: /tmp/data
         - name: ansible-tmp
           mountPath: /opt/ansible/.ansible/tmp
+        - name: tmp-dir
+          mountPath: /tmp
       volumes:
       - name: tmp-store
         persistentVolumeClaim:
           claimName: pvc-sysbench-rwx
           readOnly: false
       - name: ansible-tmp
+        emptyDir: {}
+      - name: tmp-dir
         emptyDir: {}
       restartPolicy: Never
