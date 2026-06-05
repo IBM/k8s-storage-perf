@@ -1,13 +1,16 @@
-
 # OCP Parameters
-ocp_url: https://api.sre-cld-ldap-fsx-540-tar-g2.cpdonawsonline.com:6443
-ocp_username: ocadmin  # a cluster admin user
+#ocp_url: https://api.provision1cpd40.cp.fyre.ibm.com:6443
+ocp_url: https://api.sre-ldap-upg-5311p5-netap.cpdonawsonline.com:6443
+ocp_username: ocadmin
 ocp_password: password
+#ocp_username: kubeadmin  # a cluster admin user
+#ocp_password: xZYKD-gtSc4-MuYGd-DPYp3
 ocp_token: <required if user/password not available>
 ocp_apikey: <required if neither user/password or token not available>
-
 storageClass_ReadWriteOnce: ontap-nas # eg "ocs-storagecluster-ceph-rbd"
-storageClass_ReadWriteMany: ontap-nas  # eg "ocs-storagecluster-cephfs"
+storageClass_ReadWriteMany: ontap-nas 
+#storageClass_ReadWriteOnce: ocs-storagecluster-ceph-rbd # eg "ocs-storagecluster-ceph-rbd"
+#storageClass_ReadWriteMany: ocs-storagecluster-cephfs  # eg "ocs-storagecluster-cephfs"
 
 run_storage_perf: true
 
@@ -15,16 +18,17 @@ arch: amd64  # amd64, ppc64le
 
 ############################ STORAGE PERFORMANCE PARAMETERS START #######################
 # vars file for roles/storage-perf-test
-storage_perf_namespace: k8sspf  # openshift namespace/project where jobs will be executed, it will be created by playbook if not already existing.
+storage_perf_namespace: spfks1  # openshift namespace/project where jobs will be executed, it will be created by playbook if not already existing.
 logfolder: '.logs'
 #imageurl: icr.io/cpopen/cpd/k8s-storage-perf:5.2.2
 #imageurl: cp.stg.icr.io/cp/cpd/k8s-storage-perf:5.4.0.20260602.122953.169.amd64
 #imageurl: cp.stg.icr.io/cp/cpd/k8s-storage-perf:5.4.0.1.20260602.131423.170.amd64
 #imageurl: cp.stg.icr.io/cp/cpd/k8s-storage-perf:5.4.0.1.20260602.171047.175.amd64
-imageurl: cp.stg.icr.io/cp/cpd/k8s-storage-perf:5.4.0.20260602.180010.176.amd64
+#imageurl: cp.stg.icr.io/cp/cpd/k8s-storage-perf:5.4.0.1.20260602.202211.177.amd64
+imageurl: cp.stg.icr.io/cp/cpd/k8s-storage-perf:5.4.0.1.20260604.163929.183.amd64
 
 cluster_infrastructure: aws # optional labels eg ibmcloud, aws, azure, vmware
-cluster_name: fsx-540 # optional labels 
+cluster_name: sre-ldap-upg-5311p5-netap # optional labels 
 storage_type: fsx # optional label eg portworx, ocs, <storage vendor>
 
 # To run the performace jobs on a dedicated compute nodes, set the node label which meet the criteria.
@@ -46,12 +50,8 @@ rwx_storagesize: 10Gi
 rwo_storagesize: 10Gi
 
 # I/O mode and fsync settings for sysbench tests
-# ioMode: async with dsync flag forces O_DSYNC behavior
-# fsyncFreq: do fsync() after this number of requests (0 = don't use fsync, default=100)
+# The tool operates in dsync mode with hardcoded values: ioMode=async, fsyncFreq=0
 # file_extra_flags: dsync adds O_DSYNC flag for direct synchronous writes to disk
-# For true dsync behavior: ioMode=async, fsyncFreq=0, file_extra_flags=dsync
-ioMode: async
-fsyncFreq: 0
 file_extra_flags: dsync
 
 #sysbench random read
@@ -84,3 +84,4 @@ swrite_fileBlockSize: 1g    # 512m,1g
 
 ############################ STORAGE PERFORMANCE PARAMETERS END #########################
 
+# Made with Bob

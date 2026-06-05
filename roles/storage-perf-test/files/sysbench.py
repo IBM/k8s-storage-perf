@@ -1,6 +1,24 @@
 import shutil, os.path, re, sys, subprocess, csv
 from datetime import datetime, timezone
 
+def getSysbenchVersion():
+    """Get sysbench version information"""
+    try:
+        version_cmd = ["sysbench", "--version"]
+        result = subprocess.run(version_cmd, capture_output=True, text=True)
+        version_output = result.stdout.strip() if result.stdout else result.stderr.strip()
+        # Extract just the version number (e.g., "1.0.20" from "sysbench 1.0.20")
+        version = version_output.split()[-1] if version_output else "unknown"
+        return version
+    except Exception as e:
+        return "unknown"
+
+def printSysbenchVersion():
+    """Print sysbench version information"""
+    version = getSysbenchVersion()
+    print(f"Sysbench Version: {version}")
+    print("-" * 80)
+
 def runSysbench(threads, fileTotalSize, fileTestMode, fileBlockSize, fileIoMode, fileFsyncFreq, fileExtraFlags):
     # Change to writable directory for sysbench temp files (readOnlyRootFilesystem compatibility)
     os.chdir('/tmp/work')
@@ -46,7 +64,7 @@ def getAvg(subDict):
 def computeAvgs(data, threads):
     dict_data = [
         {'Environment': data['environment'], 'Cluster Name': data['cluster_name'], 'Storage Type': data['storage_type'], 'PVC': data['pvc'], 'Test Name': data['test_name'], 'Thread Count': data['thread_count'],
-        'Test Start Time': data['start_time'], 'Test End Time': data['end_time'],
+        'Test Start Time': data['start_time'], 'Test End Time': data['end_time'], 'Sysbench Version': data['sysbench_version'],
         'Reads/s': getAvg(data['throughput_read']),
         'Writes/s': getAvg(data['throughput_write']), 'read MiB/s': getAvg(data['file_ops_read']), 'write MiB/s': getAvg(data['file_ops_write']), 'Total Time': getAvg(data['total_time']),
         'Latency Min': getAvg(data['latency_min']), 'Latency Avg': getAvg(data['latency_avg']), 'Latency Max': getAvg(data['latency_max']), 'Latency 95th': getAvg(data['latency_95th'])},
@@ -71,6 +89,9 @@ def runtest(numOfTests, thread, fileTotalSize, fileNum, fileTestMode, fbs, fileI
     keys=['throughput_read', 'throughput_write', 'file_ops_read', 'file_ops_write', 'total_time', 'latency_min', 'latency_avg', 'latency_max', 'latency_95th']
     for key in keys:
         data[key] = {}
+    
+    # Get sysbench version
+    sysbench_version = getSysbenchVersion()
     
     # Capture test start time
     start_time = datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S UTC')
@@ -102,6 +123,7 @@ def runtest(numOfTests, thread, fileTotalSize, fileNum, fileTestMode, fbs, fileI
     data['pvc'] = pvc
     data['start_time'] = start_time
     data['end_time'] = end_time
+    data['sysbench_version'] = sysbench_version
     
     return computeAvgs(data, thread)
 
@@ -120,6 +142,9 @@ if __name__ == "__main__":
     pvc = sys.argv[12]
     
     numOfTests = 3
+    
+    # Print sysbench version at the start of the test
+    printSysbenchVersion()
     
     result = runtest(numOfTests, thread, fileTotalSize, fileNum, fileTestMode, fbs, fileIoMode, fileFsyncFreq, fileExtraFlags, environment, clusterName, storageType, pvc)
     print(result)
