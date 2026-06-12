@@ -1,6 +1,14 @@
 import shutil, os.path, re, sys, subprocess, csv
 
 def runSysbench(threads, fileTotalSize, fileTestMode, fileBlockSize, fileIoMode, fileFsyncFreq, fileExtraFlags):
+    # Change to writable directory for sysbench temp files (readOnlyRootFilesystem compatibility)
+    # /tmp/work is created in Dockerfile and mounted as emptyDir volume in pod
+    work_dir = '/tmp/work'
+    # Defensive check: ensure directory exists (should already exist from Dockerfile + volume mount)
+    if not os.path.exists(work_dir):
+        os.makedirs(work_dir, exist_ok=True)
+    os.chdir(work_dir)
+    
     prepare = ["sysbench", "--threads="+threads, "--file-num="+fileNum, "--test=fileio", "--file-total-size="+fileTotalSize, "--file-test-mode="+fileTestMode, "--file-block-size="+fileBlockSize, "--file-io-mode="+fileIoMode, "--file-fsync-freq="+fileFsyncFreq, "prepare"]
     runtest = ["sysbench", "--threads="+threads, "--file-num="+fileNum, "--test=fileio", "--file-total-size="+fileTotalSize, "--file-test-mode="+fileTestMode, "--file-block-size="+fileBlockSize, "--file-extra-flags="+fileExtraFlags, "run"]
     cleanup = ["sysbench", "--threads="+threads, "--file-num="+fileNum, "--test=fileio", "--file-total-size="+fileTotalSize, "--file-test-mode="+fileTestMode, "--file-block-size="+fileBlockSize, "--file-io-mode="+fileIoMode, "--file-fsync-freq="+fileFsyncFreq, "cleanup"]
