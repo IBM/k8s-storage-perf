@@ -31,9 +31,13 @@ spec:
         volumeMounts:
         - name: tmp-store
           mountPath: /tmp/data
+        - name: tmp-dir
+          mountPath: /tmp/work
       volumes:
       - name: tmp-store
         persistentVolumeClaim:
           claimName: pvc-sysbench-rwo
           readOnly: false
+      - name: tmp-dir
+        emptyDir: {}
       restartPolicy: Never
