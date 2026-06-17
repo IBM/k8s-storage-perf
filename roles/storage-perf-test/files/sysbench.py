@@ -21,24 +21,37 @@ def printSysbenchVersion():
 
 def runSysbench(threads, fileTotalSize, fileTestMode, fileBlockSize, fileIoMode, fileFsyncFreq, fileExtraFlags):
     # Change to writable directory for sysbench temp files (readOnlyRootFilesystem compatibility)
-    # /tmp/work is created in Dockerfile and mounted as emptyDir volume in pod
-    work_dir = '/tmp/work'
-    # Defensive check: ensure directory exists (should already exist from Dockerfile + volume mount)
-    if not os.path.exists(work_dir):
-        os.makedirs(work_dir, exist_ok=True)
-    os.chdir(work_dir)
+    os.chdir('/tmp/work')
     
-    prepare = ["sysbench", "--threads="+threads, "--file-num="+fileNum, "--test=fileio", "--file-total-size="+fileTotalSize, "--file-test-mode="+fileTestMode, "--file-block-size="+fileBlockSize, "--file-io-mode="+fileIoMode, "--file-fsync-freq="+fileFsyncFreq, "prepare"]
-    runtest = ["sysbench", "--threads="+threads, "--file-num="+fileNum, "--test=fileio", "--file-total-size="+fileTotalSize, "--file-test-mode="+fileTestMode, "--file-block-size="+fileBlockSize, "--file-extra-flags="+fileExtraFlags, "run"]
-    cleanup = ["sysbench", "--threads="+threads, "--file-num="+fileNum, "--test=fileio", "--file-total-size="+fileTotalSize, "--file-test-mode="+fileTestMode, "--file-block-size="+fileBlockSize, "--file-io-mode="+fileIoMode, "--file-fsync-freq="+fileFsyncFreq, "cleanup"]
-    p1 = subprocess.Popen(prepare, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL).wait()
-    p2 = subprocess.Popen(runtest, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
+    # Updated sysbench syntax - removed deprecated --test=fileio option
+    prepare = ["sysbench", "fileio", "--threads="+threads, "--file-num="+fileNum, "--file-total-size="+fileTotalSize, "--file-test-mode="+fileTestMode, "--file-block-size="+fileBlockSize, "--file-io-mode="+fileIoMode, "--file-fsync-freq="+fileFsyncFreq, "prepare"]
+    runtest = ["sysbench", "fileio", "--threads="+threads, "--file-num="+fileNum, "--file-total-size="+fileTotalSize, "--file-test-mode="+fileTestMode, "--file-block-size="+fileBlockSize, "--file-io-mode="+fileIoMode, "--file-fsync-freq="+fileFsyncFreq, "--file-extra-flags="+fileExtraFlags, "run"]
+    cleanup = ["sysbench", "fileio", "--threads="+threads, "--file-num="+fileNum, "--file-total-size="+fileTotalSize, "--file-test-mode="+fileTestMode, "--file-block-size="+fileBlockSize, "--file-io-mode="+fileIoMode, "--file-fsync-freq="+fileFsyncFreq, "cleanup"]
+    
+    # Debug: Print the actual command being executed
+    print(f"Running sysbench command: {' '.join(runtest)}")
+    print(f"Working directory: {os.getcwd()}")
+    
+    # Run prepare phase - all commands run in /tmp/work (writable with readOnlyRootFilesystem)
+    p1 = subprocess.Popen(prepare, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    prep_out, prep_err = p1.communicate()
+    if p1.returncode != 0:
+        print(f"Prepare phase failed: {prep_err.decode('utf-8')}")
+        return None
+    
+    # Run test phase
+    p2 = subprocess.Popen(runtest, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out, err = p2.communicate()
-    if err is None:
-        return out.decode("utf-8")
-    print(err)
-    p3 = subprocess.Popen(cleanup, stdout=subprocess.PIPE).wait()
-    return None
+    
+    # Run cleanup phase
+    p3 = subprocess.Popen(cleanup, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    p3.communicate()
+    
+    if p2.returncode != 0:
+        print(f"Test phase failed: {err.decode('utf-8')}")
+        return None
+    
+    return out.decode("utf-8")
 
 def getAvg(subDict):
     if subDict and len(subDict.values()) > 0:
@@ -135,3 +148,5 @@ if __name__ == "__main__":
     
     result = runtest(numOfTests, thread, fileTotalSize, fileNum, fileTestMode, fbs, fileIoMode, fileFsyncFreq, fileExtraFlags, environment, clusterName, storageType, pvc)
     print(result)
+
+# Made with Bob

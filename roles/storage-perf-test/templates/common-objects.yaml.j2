@@ -9,6 +9,9 @@ kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: pvc-sysbench-rwx
+  labels:
+    icpdsupport/ignore-on-nd-backup: "true"
+    velero.io/exclude-from-backup : "true"  
   namespace: "{{ storage_perf_namespace }}"
 spec:
   accessModes:
@@ -22,6 +25,9 @@ kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: pvc-sysbench-rwo
+  labels:
+    icpdsupport/ignore-on-nd-backup: "true"
+    velero.io/exclude-from-backup: "true"  
   namespace: "{{ storage_perf_namespace }}"
 spec:
   accessModes:

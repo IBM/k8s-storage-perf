@@ -1,0 +1,15 @@
+---
+# copied from: https://github.ibm.com/PrivateCloud-analytics/shared-images-and-tools/blob/main/scripts/build_operator_base_images/requirements.yml
+collections:
+  # for 'k8s', 'k8s_info' tasks
+  - name: kubernetes.core
+  # optional dependency of kubernetes.core for caching
+  - name: cloud.common
+  # for 'k8s_status' task
+  - name: operator_sdk.util
+    version: ">=0.5.0"
+  # still used by zen-ansible-utils:
+  - name: community.kubernetes
+    version: 2.0.1
+  # needed to allow stdout callback to work (i.e. ANSIBLE_STDOUT_CALLBACK=yaml)
+  - name: community.general

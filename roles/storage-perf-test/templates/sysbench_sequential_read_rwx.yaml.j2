@@ -9,10 +9,18 @@ spec:
     metadata:
       name: sysbench-sequential-read-rwx
     spec:
+      serviceAccountName: storage-perf-sa
       {{ cm.nodeAffinity() | indent(6) }}
       containers:
       - name: sysbench-sequential-read-rwx
-        image: {{ storage_perf_image  }}
+        image: {{ storage_perf_image }}
+        securityContext:
+          readOnlyRootFilesystem: true
+          allowPrivilegeEscalation: false
+          runAsNonRoot: true
+          capabilities:
+            drop:
+              - ALL
         command: ["python3"]
         args:
           - '/tmp/sysbench.py'
@@ -31,6 +39,8 @@ spec:
         volumeMounts:
         - name: tmp-store
           mountPath: /tmp/data
+        - name: ansible-tmp
+          mountPath: /opt/ansible/.ansible/tmp
         - name: tmp-dir
           mountPath: /tmp/work
       volumes:
@@ -38,6 +48,8 @@ spec:
         persistentVolumeClaim:
           claimName: pvc-sysbench-rwx
           readOnly: false
+      - name: ansible-tmp
+        emptyDir: {}
       - name: tmp-dir
         emptyDir: {}
       restartPolicy: Never
