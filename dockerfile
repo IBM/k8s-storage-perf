@@ -1,6 +1,6 @@
 ARG architecture
 
-FROM --platform=linux/${architecture} cp.stg.icr.io/cp/cpd/ansible-operator-base:latest
+FROM --platform=linux/${architecture} quay.io/operator-framework/ansible-operator:v1.31.0
 
 ARG version
 
@@ -41,27 +41,15 @@ COPY cleanup.sh /usr/local/bin/cleanup.sh
 
 RUN mkdir /tmp/data
 COPY roles/storage-perf-test/files/sysbench.py /tmp/
-RUN ln -fs ${HOME}/bin/entrypoint /usr/local/bin/entrypoint \
-    && ln -s /usr/bin/python3 /usr/local/bin/python
+RUN ln -fs ${HOME}/bin/entrypoint /usr/local/bin/entrypoint
 
-# EPEL8 has sysbench for: x86_64, s390x, ppc64le
-RUN rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
-
-# reinstall pip for additional packages, from: https://github.ibm.com/PrivateCloud-analytics/shared-images-and-tools/blob/main/README.md
-RUN microdnf install -y --nodocs python3.12-setuptools-wheel python3.12-pip-wheel tar gzip sysbench openssl \
-    && export PIP_NO_CACHE_DIR=1 PIP_ROOT_USER_ACTION=ignore \
-    && python3 -m ensurepip \
-    && python3 -m pip install --upgrade pip setuptools \
-    && python3 -m pip install openshift Jinja2 yasha argparse oauthlib \
-    && python3 -m pip uninstall -y pip setuptools \
-    && rpm --erase --nodeps python3.12-setuptools-wheel python3.12-pip-wheel \
-    && microdnf clean all && rm -rf /var/cache/* /var/log/dnf* /var/log/yum.* /usr/share/zoneinfo
-
-COPY oc.tgz /usr/local/bin
-RUN cd /usr/local/bin \
-    && tar -xvzf oc.tgz \
-    && rm -f oc.tgz \
-    && chown -R ${USER_UID}:0 ${HOME} && chmod -R ug+rwx ${HOME}
+RUN python3 -m pip install --no-cache-dir --upgrade pip \
+  && pip3 install --no-cache-dir openshift Jinja2 yasha argparse oauthlib \
+  && ln -s /usr/bin/python3 /usr/local/bin/python \
+  && ansible-galaxy collection install operator_sdk.util \
+  && ansible-galaxy collection install kubernetes.core \
+  && curl -sL https://github.com/okd-project/okd/releases/download/4.13.0-0.okd-2023-09-03-082426/openshift-client-linux-4.13.0-0.okd-2023-09-03-082426.tar.gz | tar xvz --directory /usr/local/bin/. \
+  && chown -R ${USER_UID}:0 ${HOME} && chmod -R ug+rwx ${HOME}
 
 WORKDIR ${HOME}
 USER ${USER_UID}
