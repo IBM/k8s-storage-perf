@@ -1,8 +1,7 @@
-ARG architecture
-
-FROM --platform=linux/${architecture} quay.io/operator-framework/ansible-operator:v1.31.0
+FROM quay.io/operator-framework/ansible-operator:v1.31.0
 
 ARG version
+ARG architecture
 
 LABEL name="k8s-storage-perf" \
       maintainer="IBM" \
@@ -11,8 +10,6 @@ LABEL name="k8s-storage-perf" \
       release="Containerized packaging for the K8s storage performance ansible playbooks" \
       summary="This is a containerized version of the k8s-storage-perf ansible playbooks" \
       description="This image contains the ansible playbooks for running the storage test execution suite"
-
-ARG architecture
 
 USER 0
 
