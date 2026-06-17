@@ -4,6 +4,14 @@
 
   block:
 
+    - name: Delete existing sysbench random read rwo job if present
+      kubernetes.core.k8s:
+        state: absent
+        api_version: batch/v1
+        kind: Job
+        namespace: "{{ storage_perf_namespace }}"
+        name: sysbench-random-read-rwo
+
     - name:  Run sysbench random read RWO test
       kubernetes.core.k8s:
         state: present

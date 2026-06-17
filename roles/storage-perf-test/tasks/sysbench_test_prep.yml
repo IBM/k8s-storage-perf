@@ -1,5 +1,10 @@
 ---
 # Run sysbench test
+- name: Setup ServiceAccount and SCC for storage performance tests
+  kubernetes.core.k8s:
+    state: present
+    definition: "{{ lookup('template', 'security-objects.yaml.j2') }}"
+
 - name:  Setup PVCs to run test on
   kubernetes.core.k8s:
     state: present

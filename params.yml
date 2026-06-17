@@ -17,7 +17,7 @@ arch: amd64  # amd64, ppc64le
 # vars file for roles/storage-perf-test
 storage_perf_namespace: k8sspf  # openshift namespace/project where jobs will be executed, it will be created by playbook if not already existing.
 logfolder: '.logs'
-imageurl: icr.io/cpopen/cpd/k8s-storage-perf:5.2.2
+imageurl: icr.io/cpopen/cpd/k8s-storage-perf:5.3.1
 
 cluster_infrastructure: fyre # optional labels eg ibmcloud, aws, azure, vmware
 cluster_name: D601 # optional labels 
@@ -41,8 +41,9 @@ rwx_storagesize: 10Gi
 # follow the guidance from your storage provider to ensure you have sufficient IOPS. 
 rwo_storagesize: 10Gi
 
-# Do not change the file_extra_flags setting. You must use dsync to ensure that the output of the 
-# storage performance tool is accurate.
+# I/O mode and fsync settings for sysbench tests
+# The tool operates in dsync mode with hardcoded values: ioMode=async, fsyncFreq=0
+# file_extra_flags: dsync adds O_DSYNC flag for direct synchronous writes to disk
 file_extra_flags: dsync
 
 #sysbench random read

@@ -1,3 +1,4 @@
 ---
 # defaults file for roles/storage-perf-test
+
 storage_perf_image: "{{ performance_imageurl if performance_imageurl is defined else imageurl }}"
