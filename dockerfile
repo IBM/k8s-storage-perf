@@ -22,6 +22,8 @@ COPY roles ${HOME}/roles
 COPY *.yml LICENSE *.py *.sh ${HOME}
 COPY cleanup.sh /usr/local/bin/cleanup.sh
 
+RUN mkdir /tmp/data /tmp/work
+
 RUN ln -fs ${HOME}/bin/entrypoint /usr/local/bin/entrypoint
 
 RUN python3 -m pip install --no-cache-dir --upgrade pip \
