@@ -33,10 +33,13 @@ def runSysbench(threads, fileTotalSize, fileTestMode, fileBlockSize, fileIoMode,
     print(f"Working directory: {os.getcwd()}")
     
     # Run prepare phase - all commands run in /tmp/data (PVC mount)
+    print(f"Running prepare command: {' '.join(prepare)}")
     p1 = subprocess.Popen(prepare, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     prep_out, prep_err = p1.communicate()
     if p1.returncode != 0:
-        print(f"Prepare phase failed: {prep_err.decode('utf-8')}")
+        print(f"Prepare phase failed (rc={p1.returncode}):")
+        print(f"  stdout: {prep_out.decode('utf-8')}")
+        print(f"  stderr: {prep_err.decode('utf-8')}")
         return None
     
     # Run test phase
