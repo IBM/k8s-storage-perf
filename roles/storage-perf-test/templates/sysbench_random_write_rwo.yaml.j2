@@ -10,6 +10,8 @@ spec:
       name: sysbench-random-write-rwo
     spec:
       serviceAccountName: storage-perf-sa
+      securityContext:
+        fsGroup: 1000
       {{ cm.nodeAffinity() | indent(6) }}
       containers:
       - name: sysbench-random-write-rwo
