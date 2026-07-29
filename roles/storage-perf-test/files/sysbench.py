@@ -13,28 +13,6 @@ def getSysbenchVersion():
     except Exception as e:
         return "unknown"
 
-def getImageDigest():
-    """Resolve the sha256 digest of the running container image via oc get pod.
-    POD_NAME and POD_NAMESPACE are injected by the Downward API in the job template."""
-    try:
-        pod_name = os.environ.get('POD_NAME', '')
-        pod_namespace = os.environ.get('POD_NAMESPACE', '')
-        if not pod_name or not pod_namespace:
-            return "unknown"
-        cmd = ["oc", "get", "pod", pod_name, "-n", pod_namespace,
-               "-o", "jsonpath={.status.containerStatuses[0].imageID}"]
-        result = subprocess.run(cmd, capture_output=True, text=True)
-        image_id = result.stdout.strip()
-        if not image_id:
-            return "unknown"
-        # imageID is typically "docker-pullable://registry/image@sha256:abc123..."
-        # extract just the sha256:... digest
-        if '@' in image_id:
-            return image_id.split('@')[-1]
-        return image_id
-    except Exception:
-        return "unknown"
-
 def printSysbenchVersion():
     """Print sysbench version information"""
     version = getSysbenchVersion()
@@ -94,7 +72,7 @@ def computeAvgs(data, threads):
         'Writes/s': getAvg(data['throughput_write']), 'read MiB/s': getAvg(data['file_ops_read']), 'write MiB/s': getAvg(data['file_ops_write']), 'Total Time': getAvg(data['total_time']),
         'Latency Min': getAvg(data['latency_min']), 'Latency Avg': getAvg(data['latency_avg']), 'Latency Max': getAvg(data['latency_max']), 'Latency 95th': getAvg(data['latency_95th']),
         'Sysbench Version': data['sysbench_version'], 'Image': data['image'].split('/')[-1],
-        'Image Digest': data['image_digest']},
+        'Image Digest': 'pending'},
     ]
     return(dict_data)
 
@@ -152,7 +130,6 @@ def runtest(numOfTests, thread, fileTotalSize, fileNum, fileTestMode, fbs, fileI
     data['end_time'] = end_time
     data['sysbench_version'] = sysbench_version
     data['image'] = image
-    data['image_digest'] = getImageDigest()
 
     return computeAvgs(data, thread)
 

@@ -25,15 +25,6 @@ spec:
               - ALL
             add:
               - SYS_ADMIN
-        env:
-        - name: POD_NAME
-          valueFrom:
-            fieldRef:
-              fieldPath: metadata.name
-        - name: POD_NAMESPACE
-          valueFrom:
-            fieldRef:
-              fieldPath: metadata.namespace
         command: ["python3"]
         args:
           - '/tmp/sysbench.py'
