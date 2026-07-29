@@ -71,7 +71,7 @@ def computeAvgs(data, threads):
         'Reads/s': getAvg(data['throughput_read']),
         'Writes/s': getAvg(data['throughput_write']), 'read MiB/s': getAvg(data['file_ops_read']), 'write MiB/s': getAvg(data['file_ops_write']), 'Total Time': getAvg(data['total_time']),
         'Latency Min': getAvg(data['latency_min']), 'Latency Avg': getAvg(data['latency_avg']), 'Latency Max': getAvg(data['latency_max']), 'Latency 95th': getAvg(data['latency_95th']),
-        'Sysbench Version': data['sysbench_version'], 'Image': data['image']},
+        'Sysbench Version': data['sysbench_version'], 'Image': data['image'].split('/')[-1]},
     ]
     return(dict_data)
 
