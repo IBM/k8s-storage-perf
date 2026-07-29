@@ -38,6 +38,7 @@ spec:
           - '{{ cluster_name }}'
           - '{{ storage_type }}'
           - 'pvc-sysbench-rwo'
+          - '{{ storage_perf_image }}'
         volumeMounts:
         - name: tmp-store
           mountPath: /tmp/data

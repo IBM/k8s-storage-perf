@@ -67,10 +67,11 @@ def getAvg(subDict):
 def computeAvgs(data, threads):
     dict_data = [
         {'Environment': data['environment'], 'Cluster Name': data['cluster_name'], 'Storage Type': data['storage_type'], 'PVC': data['pvc'], 'Test Name': data['test_name'], 'Thread Count': data['thread_count'],
-        'Test Start Time': data['start_time'], 'Test End Time': data['end_time'], 'Sysbench Version': data['sysbench_version'],
+        'Test Start Time': data['start_time'], 'Test End Time': data['end_time'],
         'Reads/s': getAvg(data['throughput_read']),
         'Writes/s': getAvg(data['throughput_write']), 'read MiB/s': getAvg(data['file_ops_read']), 'write MiB/s': getAvg(data['file_ops_write']), 'Total Time': getAvg(data['total_time']),
-        'Latency Min': getAvg(data['latency_min']), 'Latency Avg': getAvg(data['latency_avg']), 'Latency Max': getAvg(data['latency_max']), 'Latency 95th': getAvg(data['latency_95th'])},
+        'Latency Min': getAvg(data['latency_min']), 'Latency Avg': getAvg(data['latency_avg']), 'Latency Max': getAvg(data['latency_max']), 'Latency 95th': getAvg(data['latency_95th']),
+        'Sysbench Version': data['sysbench_version'], 'Image': data['image']},
     ]
     return(dict_data)
 
@@ -87,7 +88,7 @@ def extractValue(text):
             return 0
     return 0
 
-def runtest(numOfTests, thread, fileTotalSize, fileNum, fileTestMode, fbs, fileIoMode, fileFsyncFreq, fileExtraFlags, environment, clusterName, storageType, pvc):
+def runtest(numOfTests, thread, fileTotalSize, fileNum, fileTestMode, fbs, fileIoMode, fileFsyncFreq, fileExtraFlags, environment, clusterName, storageType, pvc, image):
     data={}
     keys=['throughput_read', 'throughput_write', 'file_ops_read', 'file_ops_write', 'total_time', 'latency_min', 'latency_avg', 'latency_max', 'latency_95th']
     for key in keys:
@@ -127,11 +128,12 @@ def runtest(numOfTests, thread, fileTotalSize, fileNum, fileTestMode, fbs, fileI
     data['start_time'] = start_time
     data['end_time'] = end_time
     data['sysbench_version'] = sysbench_version
-    
+    data['image'] = image
+
     return computeAvgs(data, thread)
 
 if __name__ == "__main__":
-    thread = sys.argv[1]
+    threads_arg = sys.argv[1]
     fileTotalSize = sys.argv[2]
     fileNum = sys.argv[3]
     fileTestMode = sys.argv[4]
@@ -143,13 +145,21 @@ if __name__ == "__main__":
     clusterName = sys.argv[10]
     storageType = sys.argv[11]
     pvc = sys.argv[12]
-    
+    image = sys.argv[13]
+
     numOfTests = 3
-    
+
     # Print sysbench version at the start of the test
     printSysbenchVersion()
-    
-    result = runtest(numOfTests, thread, fileTotalSize, fileNum, fileTestMode, fbs, fileIoMode, fileFsyncFreq, fileExtraFlags, environment, clusterName, storageType, pvc)
-    print(result)
+
+    # threads_arg may be a single value (e.g. "8") or a comma-separated list
+    # (e.g. "1,4,8,16") used in extended/all-metrics runs.  Iterate over each.
+    thread_list = [t.strip() for t in threads_arg.split(',')]
+    all_results = []
+    for thread in thread_list:
+        result = runtest(numOfTests, thread, fileTotalSize, fileNum, fileTestMode, fbs, fileIoMode, fileFsyncFreq, fileExtraFlags, environment, clusterName, storageType, pvc, image)
+        if result:
+            all_results.extend(result)
+    print(all_results)
 
 # Made with Bob
