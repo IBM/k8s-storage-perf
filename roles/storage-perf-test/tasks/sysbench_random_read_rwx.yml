@@ -20,6 +20,22 @@
           type: Complete
           status: "True"
 
+    - name: Get pod info for image digest (random read RWX)
+      kubernetes.core.k8s_info:
+        api_version: v1
+        kind: Pod
+        namespace: "{{ storage_perf_namespace }}"
+        label_selectors:
+        - job-name=sysbench-random-read-rwx
+      register: pod_info_rr_rwx
+
+    - name: Write image digest to shared file
+      local_action:
+        module: copy
+        content: "{{ pod_info_rr_rwx.resources[0].status.containerStatuses[0].imageID | regex_replace('^.*@', '') }}"
+        dest: "{{ logfolder }}/image_digest.txt"
+        force: false
+
     - name: Get logs of the sysbench random read pod for RWX
       kubernetes.core.k8s_log:
         namespace: "{{ storage_perf_namespace }}"

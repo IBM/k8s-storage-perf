@@ -50,14 +50,25 @@ if __name__=='__main__':
         print("Usage: python jsontocsv.py <folder_name>")
         sys.exit(1)
     folderPath = sys.argv[1]+"/"
-    
-    # Check if folder exists and has files
+
+    # Read image digest written by Ansible after each job completes.
+    # The file contains just the sha256:... string (no trailing newline needed).
+    digest_path = folderPath + "image_digest.txt"
+    image_digest = "unknown"
+    if os.path.exists(digest_path):
+        with open(digest_path) as f:
+            image_digest = f.read().strip() or "unknown"
+
+    # Check if folder exists and has files (exclude image_digest.txt itself)
     walk_results = list(os.walk(folderPath))
-    if not walk_results or len(walk_results[0][2]) == 0:
+    if not walk_results:
         print(f"Error: No log files found in {folderPath}")
         sys.exit(1)
-    
-    filenames = walk_results[0][2]
+    filenames = [f for f in walk_results[0][2] if f != "image_digest.txt"]
+    if not filenames:
+        print(f"Error: No log files found in {folderPath}")
+        sys.exit(1)
+
     allData = []
     for filename in filenames:
         try:
@@ -70,19 +81,22 @@ if __name__=='__main__':
                     if line.startswith('[{'):
                         dict_data = line
                         break
-                
+
                 if dict_data:
                     ddata = dict_data.replace("'", "\"")
                     ddata = ddata.replace("write Mb", "write MiB")
                     ddata = ddata.replace("read Mb", "read MiB")
-                    if ddata!="":
-                        allData += json.loads(ddata)
+                    if ddata != "":
+                        rows = json.loads(ddata)
+                        for row in rows:
+                            row['Image Digest'] = image_digest
+                        allData += rows
         except (KeyError, json.JSONDecodeError, IndexError) as e:
             print(f"Warning: Skipping {filename} due to error: {e}")
             continue
-    
+
     if not allData:
         print("Error: No valid data found in log files")
         sys.exit(1)
-    
+
     toCsv(allData)
