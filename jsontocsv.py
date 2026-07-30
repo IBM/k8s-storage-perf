@@ -7,7 +7,7 @@ latency = '11'
 def toCsv(dict_data):
     columns = ['Cluster Name', 'PVC', 'Storage Type', 'Environment', 'Test Name', 'Thread Count', 'Test Start Time', 'Test End Time', 'write MiB/s', 'Writes/s', 'read MiB/s', 'Reads/s', 'Total Time', 'Latency Min', 'Latency Avg', 'Latency Max', 'Latency 95th', 'Sysbench Version', 'Image', 'Image Digest']
     summary = ['Summary', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '']
-    summarycolumns = ['Cluster Name', 'PVC', 'Storage Type', 'Environment', 'Test Name', 'Thread Count', 'Test Start Time', 'Test End Time', 'write MiB/s', 'Requirement', 'Sysbench Version']
+    summarycolumns = ['Cluster Name', 'PVC', 'Storage Type', 'Environment', 'Test Name', 'Thread Count', 'Test Start Time', 'Test End Time', 'write MiB/s', 'Requirement', 'Sysbench Version', 'Image Digest']
     detail = ['Detailed Measurements', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '']
     blank = ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '']
     csv_file = "result.csv"
@@ -31,7 +31,6 @@ def toCsv(dict_data):
                    del data['Latency Avg']
                    del data['Latency Min']
                    del data['Image']
-                   del data['Image Digest']
                    summarycolumnwriter.writerow(data)
             blankwriter = csv.DictWriter(csvfile, fieldnames=blank)
             blankwriter.writeheader()
