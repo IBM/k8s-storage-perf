@@ -19,8 +19,10 @@ def toCsv(dict_data):
             summarycolumnwriter.writeheader()
             dict_copy = deepcopy(dict_data)
             for data in dict_copy:
-                if data['Test Name'] == 'rndwr_4k_8' or data['Test Name'] == 'seqwr_1g_2':
-                   minumum = throughput if (data['Test Name'] == 'seqwr_1g_2') else latency
+                is_rndwr_8 = data['Test Name'].startswith('rndwr_') and data['Test Name'].endswith('_8')
+                is_seqwr_2 = data['Test Name'].startswith('seqwr_') and data['Test Name'].endswith('_2')
+                if is_rndwr_8 or is_seqwr_2:
+                   minumum = throughput if is_seqwr_2 else latency
                    data['Requirement'] = 'Recommended to meet the requirement of ' + minumum + ' MiB/s or higher'
                    del data['Latency Max']
                    del data['read MiB/s']
