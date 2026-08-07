@@ -10,6 +10,8 @@ spec:
       name: sysbench-random-write-rwx
     spec:
       serviceAccountName: storage-perf-sa
+      securityContext:
+        fsGroup: 1000
       {{ cm.nodeAffinity() | indent(6) }}
       containers:
       - name: sysbench-random-write-rwx
@@ -38,6 +40,7 @@ spec:
           - '{{ cluster_name }}'
           - '{{ storage_type }}'
           - 'pvc-sysbench-rwx'
+          - '{{ storage_perf_image }}'
         volumeMounts:
         - name: tmp-store
           mountPath: /tmp/data

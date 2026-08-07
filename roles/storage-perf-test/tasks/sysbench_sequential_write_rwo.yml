@@ -20,6 +20,22 @@
           type: Complete
           status: "True"
 
+    - name: Get pod info for image digest (sequential write RWO)
+      kubernetes.core.k8s_info:
+        api_version: v1
+        kind: Pod
+        namespace: "{{ storage_perf_namespace }}"
+        label_selectors:
+        - job-name=sysbench-sequential-write-rwo
+      register: pod_info_sw_rwo
+
+    - name: Write image digest to shared file
+      local_action:
+        module: copy
+        content: "{{ pod_info_sw_rwo.resources[0].status.containerStatuses[0].imageID | regex_replace('^.*@', '') }}"
+        dest: "{{ logfolder }}/image_digest.txt"
+        force: false
+
     - name: Get logs of the sysbench sequential write pod for RWO
       kubernetes.core.k8s_log:
         namespace: "{{ storage_perf_namespace }}"
@@ -28,8 +44,8 @@
       register: logo
 
     - name: Save sequential write Log to local file
-      local_action: 
-        module: copy 
+      local_action:
+        module: copy
         content: "{{ logo }}"
         dest: "{{ logfolder }}/sequential_write_rwo.json"
 
