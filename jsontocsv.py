@@ -4,12 +4,26 @@ from copy import deepcopy
 throughput = '128'
 latency = '11'
 
+def is_extended_run(dict_data):
+    """Return True if the data contains multiple thread counts for any rndwr_ or seqwr_ test,
+    which indicates an Extended Write or All Metrics run rather than the Minimum Required run."""
+    rndwr_threads = set()
+    seqwr_threads = set()
+    for row in dict_data:
+        name = row.get('Test Name', '')
+        if name.startswith('rndwr_'):
+            rndwr_threads.add(row.get('Thread Count', ''))
+        elif name.startswith('seqwr_'):
+            seqwr_threads.add(row.get('Thread Count', ''))
+    return len(rndwr_threads) > 1 or len(seqwr_threads) > 1
+
 def toCsv(dict_data):
     columns = ['Cluster Name', 'PVC', 'Storage Type', 'Environment', 'Test Name', 'Thread Count', 'Test Start Time', 'Test End Time', 'write MiB/s', 'Writes/s', 'read MiB/s', 'Reads/s', 'Total Time', 'Latency Min', 'Latency Avg', 'Latency Max', 'Latency 95th', 'Sysbench Version', 'Image', 'Image Digest']
     summary = ['Summary', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '']
     summarycolumns = ['Cluster Name', 'PVC', 'Storage Type', 'Environment', 'Test Name', 'Thread Count', 'Test Start Time', 'Test End Time', 'write MiB/s', 'Requirement', 'Sysbench Version', 'Image Digest']
     detail = ['Detailed Measurements', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '']
     blank = ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '']
+    extended = is_extended_run(dict_data)
     csv_file = "result.csv"
     try:
         with open(csv_file, 'w') as csvfile:
@@ -22,8 +36,11 @@ def toCsv(dict_data):
                 is_rndwr_8 = data['Test Name'].startswith('rndwr_') and data['Test Name'].endswith('_8')
                 is_seqwr_2 = data['Test Name'].startswith('seqwr_') and data['Test Name'].endswith('_2')
                 if is_rndwr_8 or is_seqwr_2:
-                   minumum = throughput if is_seqwr_2 else latency
-                   data['Requirement'] = 'Recommended to meet the requirement of ' + minumum + ' MiB/s or higher'
+                   if extended:
+                       data['Requirement'] = 'Informational only. Not for evaluation against the required target.'
+                   else:
+                       minumum = throughput if is_seqwr_2 else latency
+                       data['Requirement'] = 'Recommended to meet the requirement of ' + minumum + ' MiB/s or higher'
                    del data['Latency Max']
                    del data['read MiB/s']
                    del data['Total Time']
