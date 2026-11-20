@@ -1,7 +1,9 @@
-FROM quay.io/operator-framework/ansible-operator:v1.31.0
+
+FROM quay.io/operator-framework/ansible-operator:v1.42.3
 
 ARG version
 ARG architecture
+
 
 LABEL name="k8s-storage-perf" \
       maintainer="IBM" \
@@ -12,6 +14,9 @@ LABEL name="k8s-storage-perf" \
       description="This image contains the ansible playbooks for running the storage test execution suite"
 
 USER 0
+
+# Update all installed packages to get latest security patches
+RUN microdnf update -y && microdnf clean all
 
 ENV HOME=/opt/ansible \
     USER_NAME=ansible \
@@ -25,8 +30,9 @@ RUN echo "${USER_NAME}:x:${USER_UID}:0:${USER_NAME} user:${HOME}:/sbin/nologin" 
 ENV ANSIBLE_PYTHON_INTERPRETER /usr/local/bin/python
 ENV PATH ${PATH}:${HOME}/bin
 ENV ARCHITECTURE=${architecture}
-ENV ANSIBLE_LOCAL_TEMP=/tmp/.ansible/tmp
-ENV ANSIBLE_REMOTE_TEMP=/tmp/.ansible/tmp
+ENV ANSIBLE_LOCAL_TEMP=/opt/ansible/.ansible/tmp
+ENV ANSIBLE_REMOTE_TEMP=/opt/ansible/.ansible/tmp
+ENV ANSIBLE_COLLECTIONS_PATH=/usr/share/ansible/collections:~/.ansible/collections
 
 RUN mkdir -p /licenses
 COPY --chown=${USER_UID}:0 LICENSE /licenses

@@ -10,13 +10,13 @@ spec:
       name: sysbench-random-read-rwo
     spec:
       serviceAccountName: storage-perf-sa
-      securityContext:
-        fsGroup: 1000
       {{ cm.nodeAffinity() | indent(6) }}
       containers:
       - name: sysbench-random-read-rwo
         image: {{ storage_perf_image }}
         securityContext:
+          seccompProfile:
+            type: RuntimeDefault
           readOnlyRootFilesystem: true
           allowPrivilegeEscalation: false
           runAsNonRoot: true

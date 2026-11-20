@@ -1,21 +1,25 @@
 ---
-# Run sysbench test
-- name: Setup ServiceAccount and SCC for storage performance tests
+# Attempt to create the namespace and ServiceAccount from the security-objects template.
+# ignore_errors is set to true so that this does not fail when running from the zen-storage-perf
+# pod, which lacks permission to create namespaces (the namespace already exists in that path).
+- name: Setup Namespace and ServiceAccount for storage performance tests
   kubernetes.core.k8s:
     state: present
-    definition: "{{ lookup('template', 'security-objects.yaml.j2') }}"
+    definition: "{{ item }}"
+  loop: "{{ lookup('template', 'security-objects.yaml.j2') | from_yaml_all | list }}"
+  ignore_errors: true
 
-- name:  Setup PVCs to run test on
+- name: Create log directory
+  ansible.builtin.file:
+    path: "{{ logfolder if logfolder.startswith('/') else '/tmp/' + logfolder }}"
+    state: directory
+    mode: '0755'
+
+- name: Create common storage objects (PVCs)
   kubernetes.core.k8s:
     state: present
     definition: "{{ lookup('template', 'common-objects.yaml.j2') }}"
 
-- name: Wait few seconds for the PVC 
+- name: Wait for PVCs to be provisioned
   pause:
     seconds: 60
-
-- name: Create logs directory
-  ansible.builtin.file:
-    path: '{{ logfolder }}'
-    state: directory
-    mode: '0755'
