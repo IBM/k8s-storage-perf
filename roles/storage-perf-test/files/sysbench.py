@@ -133,6 +133,12 @@ def runtest(numOfTests, thread, fileTotalSize, fileNum, fileTestMode, fbs, fileI
 
     return computeAvgs(data, thread)
 
+# Original result keys, expected by fixed-schema parsers (e.g. olm-utils
+# parse_logs.py). 12-arg callers only get these; any key added later is left out.
+LEGACY_RESULT_KEYS = ['Environment', 'Cluster Name', 'Storage Type', 'PVC', 'Test Name', 'Thread Count',
+                      'Reads/s', 'Writes/s', 'read MiB/s', 'write MiB/s', 'Total Time',
+                      'Latency Min', 'Latency Avg', 'Latency Max', 'Latency 95th']
+
 if __name__ == "__main__":
     threads_arg = sys.argv[1]
     fileTotalSize = sys.argv[2]
@@ -146,7 +152,10 @@ if __name__ == "__main__":
     clusterName = sys.argv[10]
     storageType = sys.argv[11]
     pvc = sys.argv[12]
-    image = sys.argv[13]
+    # The image argument is optional: callers that predate it (e.g. olm-utils
+    # storage tests) pass 12 args and parse the output with a fixed column list.
+    legacy_caller = len(sys.argv) <= 13
+    image = sys.argv[13] if not legacy_caller else "unknown"
 
     numOfTests = 3
 
@@ -161,6 +170,9 @@ if __name__ == "__main__":
         result = runtest(numOfTests, thread, fileTotalSize, fileNum, fileTestMode, fbs, fileIoMode, fileFsyncFreq, fileExtraFlags, environment, clusterName, storageType, pvc, image)
         if result:
             all_results.extend(result)
+    if legacy_caller:
+        # Keep the original result keys so fixed-schema parsers keep working.
+        all_results = [{k: r[k] for k in LEGACY_RESULT_KEYS} for r in all_results]
     print(all_results)
 
 # Made with Bob
