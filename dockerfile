@@ -17,7 +17,12 @@ USER 0
 
 # Update all installed packages to get latest security patches
 # tar and gzip are needed to extract the oc client tarball
-RUN microdnf update -y && microdnf install -y tar gzip && microdnf clean all
+# sysbench: EPEL 8 is the only EPEL release that ships it for x86_64, aarch64, ppc64le and s390x
+# (EPEL 9 has no ppc64le/s390x build, EPEL 10 has no ppc64le build). The EL8 build installs on this EL9 base.
+RUN microdnf update -y \
+    && rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm \
+    && microdnf install -y tar gzip sysbench \
+    && microdnf clean all
 
 ENV HOME=/opt/ansible \
     USER_NAME=ansible \
