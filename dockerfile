@@ -16,7 +16,8 @@ LABEL name="k8s-storage-perf" \
 USER 0
 
 # Update all installed packages to get latest security patches
-RUN microdnf update -y && microdnf clean all
+# tar and gzip are needed to extract the oc client tarball
+RUN microdnf update -y && microdnf install -y tar gzip && microdnf clean all
 
 ENV HOME=/opt/ansible \
     USER_NAME=ansible \
@@ -46,9 +47,10 @@ RUN mkdir /tmp/data
 COPY roles/storage-perf-test/files/sysbench.py /tmp/
 RUN ln -fs ${HOME}/bin/entrypoint /usr/local/bin/entrypoint
 
-RUN python3 -m pip install --no-cache-dir --upgrade pip \
+RUN python3 -m ensurepip --upgrade \
+  && python3 -m pip install --no-cache-dir --upgrade pip \
   && pip3 install --no-cache-dir openshift Jinja2 yasha argparse oauthlib \
-  && ln -s /usr/bin/python3 /usr/local/bin/python \
+  && ln -s /usr/local/bin/python3 /usr/local/bin/python \
   && ansible-galaxy collection install operator_sdk.util \
   && ansible-galaxy collection install kubernetes.core \
   && curl -sL https://github.com/okd-project/okd/releases/download/5.0.0-okd-scos.8/openshift-client-linux-5.0.0-okd-scos.8.tar.gz | tar xvz --directory /usr/local/bin/. \
