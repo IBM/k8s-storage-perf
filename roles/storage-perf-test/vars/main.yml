@@ -1,6 +1,6 @@
 ---
 # vars file for roles/storage-perf-test
-logfolder: '.logs'
+logfolder: '/tmp/.logs'
 
 #sysbench ocs random read
 sysbench_random_read: true
